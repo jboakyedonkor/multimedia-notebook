@@ -9,14 +9,14 @@ Make sure to cd into frontend before running
 To run type 'npm start' and use expo to run on ios 
 
 
-You need to install the following dependencies using React Native App
-This assumes that you already have npm installed:
+You need to install the following dependencies using React Native App. This assumes that you already have npm installed:
 
 Expo CLI: npm install -g expo-cli
 
 Expo font: run "expo install expo-font"
 
-React-navigation: run "npm install react-navigation" 
+React-navigation: run "npm install react-navigation"
+
 then run 
 "expo install react-native-gesture-handler react-native-reanimated react-native-screens react-native-safe-area-context @react-native-community/masked-view"
 
