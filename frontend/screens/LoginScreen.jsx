@@ -1,22 +1,27 @@
 import React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import { View, Text, StyleSheet, Keyboard, TouchableWithoutFeedback} from 'react-native';
 import LoginInput from '../components/LoginInput';
 
 const LoginScreen = props => {
 
 
     return (
-        <View style = {styles.screen}>
-            <LoginInput />
-        </View>
+        
+        <TouchableWithoutFeedback onPress = {() => Keyboard.dismiss()}>
+            <View style={styles.screen}>
+                <LoginInput />
+            </View>
+        </TouchableWithoutFeedback>
     )
 }
 
 const styles = StyleSheet.create({
     screen: {
         flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center'
+        //justifyContent: 'center',
+        alignItems: 'center',
+        //paddingTop: 50,
+        backgroundColor: 'white'
     }
 });
 
