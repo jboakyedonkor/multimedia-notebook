@@ -34,7 +34,7 @@ const HomeScreen = props => {
                         }}
                     />
                 </View>
-                <View style={styles.footerButton}>
+                <View style={{...styles.footerButton, backgroundColor:'#DA4633'}}>
                     <Button
                         title='CREATE NEW ACCOUNT'
                         color = {'black'}
