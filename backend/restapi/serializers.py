@@ -7,3 +7,8 @@ class NoteSerializer( serializers.ModelSerializer):
         model = Note
         fields = ['name','text','video_link','audio_link','created_at']
 
+class TagSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Tag
+        fields = ['name', 'created_at']
