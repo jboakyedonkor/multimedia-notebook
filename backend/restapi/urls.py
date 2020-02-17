@@ -10,4 +10,9 @@ urlpatterns =[
     path('delete-note',views.delete_note,name='delete_note'),
     path('update-note',views.update_note, name='update_note'),
     path('get-note',views.get_note,name='get_note'),
+    
+    path('create-tag',views.create_tag,name='create_tag'),
+    path('delete-tag',views.delete_tag,name='delete_tag'),
+    path('update-tag',views.update_tag, name='update_tag'),
+    path('get-tag',views.get_tag,name='get_tag')
 ]

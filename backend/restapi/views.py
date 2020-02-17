@@ -8,7 +8,7 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from .models import Note, Tag
-from .serializers import NoteSerializer
+from .serializers import NoteSerializer , TagSerializer
 
 # Create your views here.
 
@@ -84,6 +84,28 @@ def create_note(request):
             content_type='application/json')
 
 
+@api_view(['DELETE'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def delete_note(request):
+    body = request.data
+    try:
+        current_note = Note.objects.get(
+            name=body['name'], user=request.user)
+        current_note.delete()
+        message = {'message': 'note deleted'}
+        return Response(
+            message,
+            status=status.HTTP_200_OK,
+            content_type='application/json')
+    except Note.DoesNotExist:
+        message = {"error": "note not found"}
+        return Response(
+            message,
+            status=status.HTTP_204_NO_CONTENT,
+            content_type='application/json')
+
+
 @api_view(['PUT'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
@@ -107,24 +129,85 @@ def update_note(request):
             message,
             status=status.HTTP_204_NO_CONTENT,
             content_type='application/json')
+            
 
+@api_view(['POST'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def create_tag(request):
+    body = request.data
+    try:
+        tag, created = Tag.objects.get_or_create(name=body['name'],user = request.user)
+        if created:
+            serializer =  TagSerializer(tag)
+            return Response(serializer.data,status= status.HTTP_201_CREATED)
+        else:
+            message = {"message" : "tag already exists"}
+            return Response(message, status= status.HTTP_200_OK)
+            
+    except KeyError:
+        return Response(status= status.HTTP_400_BAD_REQUEST)
+
+@api_view(['PUT'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def update_tag(request):
+    body = request.data
+    try:
+        current_tag = Tag.objects.get(name=body['current_name'],user=request.user)
+        current_tag.name = body['new_name']
+        current_tag.save()
+        serializer = TagSerializer(current_tag)
+        return Response(serializer.data,status=status.HTTP_200_OK, content_type='application/json')
+
+    except Tag.DoesNotExist:
+        message = {"error": "tag not found"}
+        return Response(
+            message,
+            status=status.HTTP_204_NO_CONTENT,
+            content_type='application/json')
+        
 
 @api_view(['DELETE'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
-def delete_note(request):
+def delete_tag(request):
     body = request.data
     try:
-        current_note = Note.objects.get(
-            name=body['name'], user=request.user)
-        current_note.delete()
-        message = {'message': 'note deleted'}
+        current_tag = Tag.objects.get(name=body['name'], user=request.user)
+        current_tag.delete()
+
+        message = {'message': 'tag deleted'}
         return Response(
             message,
             status=status.HTTP_200_OK,
             content_type='application/json')
-    except Note.DoesNotExist:
-        message = {"error": "note not found"}
+
+    except current_tag.DoesNotExist:
+
+        message = {"error": "tag not found"}
+        return Response(
+            message,
+            status=status.HTTP_204_NO_CONTENT,
+            content_type='application/json')
+
+@api_view(['GET'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def get_tag(request):
+    body = request.data
+    try:
+        current_tag = Tag.objects.get(name=body['name'], user=request.user)
+        serializer = TagSerializer(current_tag)
+        
+        return Response(
+            serializer.data,
+            status=status.HTTP_200_OK,
+            content_type='application/json')
+
+    except current_tag.DoesNotExist:
+
+        message = {"error": "tag not found"}
         return Response(
             message,
             status=status.HTTP_204_NO_CONTENT,
