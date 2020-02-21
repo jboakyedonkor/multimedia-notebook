@@ -15,15 +15,6 @@ const SignUpScreen = props => {
     const [username, setUsername] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
 
-    testApi =  () => {
-        console.log('here')
-        return fetch('http://192.168.145.1:8000/api/')
-          .then((response) => response.text())
-          .then((responseJson) => {
-            console.log(responseJson);
-          })
-          .catch(error => console.log(error));
-      }
     createNewUser = () => {
         console.log('new user')
         return fetch('http://10.140.82.122:8000/api/create-user', {
@@ -140,7 +131,8 @@ const styles = StyleSheet.create({
     },
     input: {
         marginVertical: 10,
-        alignSelf: 'stretch'
+        alignSelf: 'stretch',
+        width: '100%'
     },
     buttonContainer: {
         marginTop: 30,

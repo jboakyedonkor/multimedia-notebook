@@ -3,6 +3,7 @@ import { createAppContainer } from 'react-navigation';
 
 import HomeScreen from '../screens/HomeScreen';
 import LoginScreen from '../screens/LoginScreen';
+import SignUpScreen from '../screens/SignUpScreen';
 
 
 const AppNavigator = createStackNavigator(
@@ -17,6 +18,12 @@ const AppNavigator = createStackNavigator(
             screen: LoginScreen,
             navigationOptions: {
                 headerShown: true
+            }
+        },
+        SignUp: {
+            screen: SignUpScreen,
+            navigationOptions: {
+                headerShown: false
             }
         }
     }
