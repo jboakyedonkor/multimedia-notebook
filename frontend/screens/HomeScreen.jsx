@@ -39,7 +39,7 @@ const HomeScreen = props => {
                         title='CREATE NEW ACCOUNT'
                         color = {'black'}
                         onPress={() => {
-                            
+                            props.navigation.navigate({ routeName: 'SignUp' });
                         }}
                     />
                 </View>
