@@ -17,6 +17,7 @@ from .serializers import NoteSerializer , TagSerializer
 def create_new_user(request):
     try:
         body = request.data
+        print(body)
         user = User.objects.create_user(
             body['username'],
             body['email'],
