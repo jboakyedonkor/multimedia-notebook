@@ -24,6 +24,8 @@ def create_new_user(request):
             body['password'],
             first_name=body['first_name'],
             last_name=body['last_name'])
+        print("hello")
+        print(user)
         token = Token.objects.get_or_create(user=user)
 
         return Response(
@@ -31,7 +33,7 @@ def create_new_user(request):
             status=status.HTTP_201_CREATED,
             content_type='application/json')
     except Exception:
-        return Response(status=status.HTTP_200_OK)
+        return Response("failed")
 
 
 @api_view(['GET'])

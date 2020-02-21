@@ -8,6 +8,7 @@ import Input from '../components/Input';
 
 
 const SignUpScreen = props => {
+    const [email, setEmail] = useState('');
     const [firstname, setFirstname] = useState('');
     const [lastname, setLastname] = useState('');
     const [password, setPassword] = useState('');
@@ -25,7 +26,7 @@ const SignUpScreen = props => {
       }
     createNewUser = () => {
         console.log('new user')
-        return fetch('http://10.136.228.131:8000/api/create-user', {
+        return fetch('http://10.140.214.99:8000/api/create-user', {
             method: 'POST',
             headers: {
               Accept: 'application/json',
@@ -34,11 +35,12 @@ const SignUpScreen = props => {
             body: JSON.stringify({
               username: username,
               password: password,
+              email: email,
               first_name: firstname,
               last_name: lastname
             }),
           })
-          .then(response => response.text())
+          .then(response => response.json())
           .then(responseJson => console.log(responseJson))
           .catch(error => console.log(error));
       }
@@ -49,7 +51,14 @@ const SignUpScreen = props => {
                 <View style={styles.container}>
                     <Text style={styles.largeText}>Create Profile</Text>
                     <Text style={styles.smallText}>Please enter your basic information and set up a new password for secure login</Text>
-
+                    
+                    <Input
+                        placeholder={'Email'}
+                        style={styles.input}
+                        textContentType={'emailAddress'}
+                        value={email}
+                        onChangeText={text => setEmail(text)}
+                    />
                     <Input
                         placeholder={'First name'}
                         style={styles.input}
