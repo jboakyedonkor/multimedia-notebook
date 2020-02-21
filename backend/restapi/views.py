@@ -30,8 +30,8 @@ def create_new_user(request):
             token.key,
             status=status.HTTP_201_CREATED,
             content_type='application/json')
-    except Exception:
-        return Response("failed")
+    except KeyError:
+        return Response(status=status.HTTP_200_OK)
 
 
 @api_view(['GET'])

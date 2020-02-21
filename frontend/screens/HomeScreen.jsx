@@ -3,18 +3,6 @@ import { View, Text, StyleSheet, Button, Image, Dimensions } from 'react-native'
 
 const HomeScreen = props => {
 
-    getMoviesFromApiAsync =  () => {
-        console.log('here')
-        return fetch('http://10.136.112.92:8000/admin')
-          .then((response) => response.text())
-          .then((responseJson) => {
-            console.log(responseJson);
-          })
-          .catch((error) => {
-            console.error(error);
-          });
-      }
-
 
     return (
         <View style={styles.screen}>
@@ -51,7 +39,7 @@ const HomeScreen = props => {
                         title='CREATE NEW ACCOUNT'
                         color = {'black'}
                         onPress={() => {
-                            props.navigation.navigate({routeName: 'SignUp'})
+                            
                         }}
                     />
                 </View>
@@ -62,6 +50,7 @@ const HomeScreen = props => {
 
 const styles = StyleSheet.create({
     screen: {
+<<<<<<< HEAD
         
         justifyContent: 'space-between',
         alignItems: 'center',
@@ -72,6 +61,12 @@ const styles = StyleSheet.create({
 
         //maxWidth: Dimensions.get('window').width,
         //maxHeight: Dimensions.get('window').height
+=======
+        flex: 1,
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        paddingBottom: 30
+>>>>>>> master
         //borderColor: 'black',
         //borderWidth: 3
     },

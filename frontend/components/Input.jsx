@@ -14,6 +14,7 @@ const Input = props => {
 const styles = StyleSheet.create({
     input: {
         height: 50,
+        width: Dimensions.get('window').width/1.3,
         borderColor: 'grey',
         fontSize: 15,
         borderRadius: 100,
