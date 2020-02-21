@@ -23,13 +23,13 @@ def create_new_user(request):
             body['password'],
             first_name=body['first_name'],
             last_name=body['last_name'])
-        token = Token.objects.get_or_create(user=user)
+        token,created = Token.objects.get_or_create(user=user)
 
         return Response(
             token.key,
             status=status.HTTP_201_CREATED,
             content_type='application/json')
-    except Exception:
+    except KeyError:
         return Response(status=status.HTTP_200_OK)
 
 
