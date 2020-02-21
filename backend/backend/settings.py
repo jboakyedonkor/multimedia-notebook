@@ -25,12 +25,8 @@ SECRET_KEY = 'o-2j^#2-0lw3qi27d6b9o^8nn&6w6kz#qgrz0b^b=*na@*-@@!'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-<<<<<<< HEAD
 
 ALLOWED_HOSTS = ['10.136.112.92','localhost', '127.0.0.1', '192.168.145.1','10.136.228.131','10.140.214.99','10.140.82.122']
-=======
-ALLOWED_HOSTS = []
->>>>>>> master
 
 
 # Application definition

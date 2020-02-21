@@ -50,7 +50,6 @@ const HomeScreen = props => {
 
 const styles = StyleSheet.create({
     screen: {
-<<<<<<< HEAD
         
         justifyContent: 'space-between',
         alignItems: 'center',
@@ -61,12 +60,6 @@ const styles = StyleSheet.create({
 
         //maxWidth: Dimensions.get('window').width,
         //maxHeight: Dimensions.get('window').height
-=======
-        flex: 1,
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        paddingBottom: 30
->>>>>>> master
         //borderColor: 'black',
         //borderWidth: 3
     },
