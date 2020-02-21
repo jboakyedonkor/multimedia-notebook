@@ -62,10 +62,13 @@ const HomeScreen = props => {
 
 const styles = StyleSheet.create({
     screen: {
-        flex: 1,
+        //flex: 1,
         justifyContent: 'space-between',
         alignItems: 'center',
-        paddingBottom: 30
+        paddingHorizontal: 20,
+        paddingBottom: 30,
+        maxWidth: Dimensions.get('window').width,
+        maxHeight: Dimensions.get('window').height
         //borderColor: 'black',
         //borderWidth: 3
     },
