@@ -25,9 +25,9 @@ def create_new_user(request):
             first_name=body['first_name'],
             last_name=body['last_name'])
         token,created = Token.objects.get_or_create(user=user)
-
+        message = {"auth-token":"Token "+token.key}
         return Response(
-            token.key,
+            message,
             status=status.HTTP_201_CREATED,
             content_type='application/json')
     except KeyError:
