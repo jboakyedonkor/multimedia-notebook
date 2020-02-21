@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Dimensions, TouchableWithoutFeedback, Keyboard, Button } from 'react-native';
+import { View, Text, StyleSheet, Dimensions, TouchableWithoutFeedback, Keyboard, Button, SafeAreaView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import NewUser from '../models/NewUser';
 
@@ -26,7 +26,7 @@ const SignUpScreen = props => {
       }
     createNewUser = () => {
         console.log('new user')
-        return fetch('http://10.140.214.99:8000/api/create-user', {
+        return fetch('http://10.140.82.122:8000/api/create-user', {
             method: 'POST',
             headers: {
               Accept: 'application/json',
@@ -120,8 +120,8 @@ const styles = StyleSheet.create({
     },
     container: {
 
-        maxHeight: Dimensions.get('window').height / 0.8,
-        maxWidth: Dimensions.get('window').width / 0.8,
+        maxHeight: Dimensions.get('window').height / 0.7,
+        maxWidth: Dimensions.get('window').width / 0.7,
 
 
     },

@@ -24,9 +24,10 @@ def create_new_user(request):
             body['password'],
             first_name=body['first_name'],
             last_name=body['last_name'])
-        print("hello")
+        print("-------------------------------------------------")
         print(user)
         token = Token.objects.get_or_create(user=user)
+        print(token.key)
 
         return Response(
             token.key,

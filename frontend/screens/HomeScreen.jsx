@@ -62,20 +62,25 @@ const HomeScreen = props => {
 
 const styles = StyleSheet.create({
     screen: {
-        //flex: 1,
+        
         justifyContent: 'space-between',
         alignItems: 'center',
         paddingHorizontal: 20,
         paddingBottom: 30,
-        maxWidth: Dimensions.get('window').width,
-        maxHeight: Dimensions.get('window').height
+        width: '100%',
+        height:'100%',
+
+        //maxWidth: Dimensions.get('window').width,
+        //maxHeight: Dimensions.get('window').height
         //borderColor: 'black',
         //borderWidth: 3
     },
     headerContainer: {
         marginTop: 20,
         justifyContent: 'flex-end',
-        alignItems: 'center'
+        alignItems: 'center',
+        width: '100%',
+        height: '15%'
     },
     headerText: {
         marginTop: 60,
@@ -86,6 +91,7 @@ const styles = StyleSheet.create({
     },
     footerContainer: {
         alignItems: 'center',
+        //height: '80%'
     },
     footerTextContainer: {
         alignItems: 'center',
@@ -108,9 +114,9 @@ const styles = StyleSheet.create({
         color: '#DA4633'
     },
     imageContainer: {
-        width: 300,
-        height: 300,
-        borderRadius: 150,
+        width: 200,
+        height: 200,
+        borderRadius: 100,
         //borderWidth: 1,
         //borderColor: '#DA4633',
         overflow: 'hidden'
