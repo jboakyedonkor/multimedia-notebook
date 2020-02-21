@@ -3,6 +3,18 @@ import { View, Text, StyleSheet, Button, Image, Dimensions } from 'react-native'
 
 const HomeScreen = props => {
 
+    getMoviesFromApiAsync =  () => {
+        console.log('here')
+        return fetch('http://10.136.112.92:8000/admin')
+          .then((response) => response.text())
+          .then((responseJson) => {
+            console.log(responseJson);
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      }
+
 
     return (
         <View style={styles.screen}>
@@ -39,7 +51,7 @@ const HomeScreen = props => {
                         title='CREATE NEW ACCOUNT'
                         color = {'black'}
                         onPress={() => {
-                            
+                            props.navigation.navigate({routeName: 'SignUp'})
                         }}
                     />
                 </View>
