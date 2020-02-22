@@ -4,6 +4,7 @@ import { Ionicons } from '@expo/vector-icons';
 import NewUser from '../models/NewUser';
 
 import Input from '../components/Input';
+import CustomButton from '../components/CustomButton';
 
 
 
@@ -15,7 +16,7 @@ const SignUpScreen = props => {
     const [username, setUsername] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
 
-    createNewUser = () => {
+    createNewUser = async () => {
         console.log('new user')
         return fetch('http://10.140.82.122:8000/api/create-user', {
             method: 'POST',
@@ -88,9 +89,12 @@ const SignUpScreen = props => {
                         onChangeText={text => setConfirmPassword(text)}
                     />
                     <View style={styles.buttonContainer}>
-                        <Button
-                            title='submit'
-                            onPress = {createNewUser}
+                        <CustomButton
+                            style = {{backgroundColor: '#DA4633'}}
+                            title = 'submit'
+                            color = {'black'}
+                            //onPress = {createNewUser}
+                            onPress = {() => props.navigation.navigate({ routeName: 'LoggedIn'})}
                         />
                     </View>
                 </View>
