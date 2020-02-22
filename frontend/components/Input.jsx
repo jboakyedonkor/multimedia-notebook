@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
         height: 50,
         borderColor: 'grey',
         fontSize: 15,
-        borderRadius: 100,
+        borderRadius: 10,
         paddingHorizontal: 15,
         //to achieve elevation on iOS
         shadowColor: 'black',

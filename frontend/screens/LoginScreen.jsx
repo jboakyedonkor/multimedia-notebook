@@ -3,6 +3,7 @@ import { View, StyleSheet, Text, Button, Dimensions } from 'react-native';
 
 
 import Input from '../components/Input';
+import CustomButton from '../components/CustomButton';
 
 
 const LoginScreen = props => {
@@ -32,8 +33,10 @@ const LoginScreen = props => {
                     value = {password}
                     onChangeText={text => setPassword(text)}
                 />
-                <Button
+                <CustomButton
+                    style = {{backgroundColor: '#DA4633'}}
                     title = {'Sign In'}
+                    color = {'black'}
                 />
             </View>
         </View>

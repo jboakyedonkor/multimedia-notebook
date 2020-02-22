@@ -1,6 +1,9 @@
 import React from 'react';
 import { View, Text, StyleSheet, Button, Image, Dimensions } from 'react-native';
 
+
+import CustomButton from '../components/CustomButton';
+
 const HomeScreen = props => {
 
 
@@ -11,7 +14,7 @@ const HomeScreen = props => {
             </View>
 
 
-            <View style = {styles.imageContainer}>
+            <View style={styles.imageContainer}>
                 <Image
                     source={require('../assets/images/homepage.png')}
                     style={styles.image}
@@ -25,24 +28,25 @@ const HomeScreen = props => {
                     <Text>Welcome, we are happy that you are here</Text>
                     <Text>Now you can create multimedia notes for free!</Text>
                 </View>
-                <View style={styles.footerButton}>
-                    <Button
-                        title='SIGN IN'
-                        color = {'black'}
-                        onPress={() => {
-                            props.navigation.navigate({ routeName: 'Login' });
-                        }}
-                    />
-                </View>
-                <View style={{...styles.footerButton, backgroundColor:'#DA4633'}}>
-                    <Button
-                        title='CREATE NEW ACCOUNT'
-                        color = {'black'}
-                        onPress={() => {
-                            props.navigation.navigate({ routeName: 'SignUp' });
-                        }}
-                    />
-                </View>
+
+                <CustomButton
+                    style={styles.footerButton}
+                    title='SIGN IN'
+                    color={'black'}
+                    onPress={() => {
+                        props.navigation.navigate({ routeName: 'Login' });
+                    }}
+                />
+
+
+                <CustomButton
+                    style={{ ...styles.footerButton, backgroundColor: '#DA4633' }}
+                    title='CREATE NEW ACCOUNT'
+                    color={'black'}
+                    onPress={() => {
+                        props.navigation.navigate({ routeName: 'SignUp' });
+                    }}
+                />
             </View>
         </View>
     )
@@ -50,13 +54,13 @@ const HomeScreen = props => {
 
 const styles = StyleSheet.create({
     screen: {
-        
+
         justifyContent: 'space-between',
         alignItems: 'center',
         paddingHorizontal: 20,
         paddingBottom: 30,
         width: '100%',
-        height:'100%',
+        height: '100%',
 
         //maxWidth: Dimensions.get('window').width,
         //maxHeight: Dimensions.get('window').height
@@ -87,14 +91,6 @@ const styles = StyleSheet.create({
     },
     footerButton: {
         width: Dimensions.get('window').width / 1.5,
-        justifyContent: 'center',
-        marginTop: 20,
-        borderRadius: 100,
-        shadowColor: 'black',
-        shadowOffset: { width: 0, height: 2 },
-        shadowRadius: 1,
-        shadowOpacity: 0.26,
-        backgroundColor: 'white',
     },
     footerTextLg: {
         fontSize: 30,
