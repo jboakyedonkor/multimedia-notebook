@@ -1,6 +1,7 @@
 import React from 'react';
 import { createStackNavigator } from 'react-navigation-stack';
 import {createBottomTabNavigator} from 'react-navigation-tabs';
+import {createSwitchNavigator} from 'react-navigation';
 //import {createDrawerNavigator} from 'react-navigation-drawer';
 import { createAppContainer } from 'react-navigation';
 import {Ionicons, FontAwesome} from '@expo/vector-icons';

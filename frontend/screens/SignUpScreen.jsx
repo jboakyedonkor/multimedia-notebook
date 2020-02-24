@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Dimensions, TouchableWithoutFeedback, Keyboard, Button, SafeAreaView } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { View, Text, StyleSheet, Dimensions, TouchableWithoutFeedback, Keyboard, Button, AsyncStorage } from 'react-native';
+
 import NewUser from '../models/NewUser';
 
 import Input from '../components/Input';
@@ -18,24 +18,31 @@ const SignUpScreen = props => {
 
     createNewUser = async () => {
         console.log('new user')
-        return fetch('http://10.140.82.122:8000/api/create-user', {
+        return fetch('http://10.140.160.159:8000/api/create-user', {
             method: 'POST',
             headers: {
-              Accept: 'application/json',
-              'Content-Type': 'application/json',
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-              username: username,
-              password: password,
-              email: email,
-              first_name: firstname,
-              last_name: lastname
+                username: username,
+                password: password,
+                email: email,
+                first_name: firstname,
+                last_name: lastname
             }),
-          })
-          .then(response => response.json())
-          .then(responseJson => console.log(responseJson))
-          .catch(error => console.log(error));
-      }
+        })
+            .then(response => response.json())
+            .then(responseJson => {
+                console.log(responseJson);
+                const {auth_token} = responseJson;
+                console.log(auth_token);
+                props.navigation.navigate({ routeName: 'LoggedIn', params:{token: auth_token}});
+                //AsyncStorage.clear();
+                //AsyncStorage.setItem('token', responseJson);
+            })
+            .catch(error => console.log(error));
+    }
 
     return (
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
@@ -43,7 +50,7 @@ const SignUpScreen = props => {
                 <View style={styles.container}>
                     <Text style={styles.largeText}>Create Profile</Text>
                     <Text style={styles.smallText}>Please enter your basic information and set up a new password for secure login</Text>
-                    
+
                     <Input
                         placeholder={'Email'}
                         style={styles.input}
@@ -90,11 +97,11 @@ const SignUpScreen = props => {
                     />
                     <View style={styles.buttonContainer}>
                         <CustomButton
-                            style = {{backgroundColor: '#DA4633'}}
-                            title = 'submit'
-                            color = {'black'}
-                            //onPress = {createNewUser}
-                            onPress = {() => props.navigation.navigate({ routeName: 'LoggedIn'})}
+                            style={{ backgroundColor: '#DA4633' }}
+                            title='submit'
+                            color={'black'}
+                            //onPress={createNewUser}
+                            onPress = {() => props.navigation.navigate({ routeName: 'Landing', params:{token: 'heloooooooo'}})}
                         />
                     </View>
                 </View>
