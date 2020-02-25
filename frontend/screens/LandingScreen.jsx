@@ -1,14 +1,26 @@
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import React, {useRef} from 'react';
+import { View, Text, StyleSheet, AsyncStorage } from 'react-native';
 import { Ionicons, FontAwesome } from '@expo/vector-icons';
+
 
 
 const LandingScreen = props => {
 
-    //const token = props.navigation.getParams('token')
+    //const token = props.route.params.token;
+    //console.log(token)
+
+    //this fetches the token from async storage
+        //let temp = AsyncStorage.getItem('token');
+        //token.current = temp;
+    
+
+    const token = props.route.params ? props.route.params.token : null;
+
     return (
         <View style={styles.screen}>
-            <Text>Welcome to the landing page</Text>
+            <Text>Welcome home</Text>
+            <Text>{token}</Text>
+            
         </View>
     )
 }

@@ -34,7 +34,7 @@ const HomeScreen = props => {
                     title='SIGN IN'
                     color={'black'}
                     onPress={() => {
-                        props.navigation.navigate({ routeName: 'Login' });
+                        props.navigation.navigate({ name: 'Login' });
                     }}
                 />
 
@@ -44,7 +44,7 @@ const HomeScreen = props => {
                     title='CREATE NEW ACCOUNT'
                     color={'black'}
                     onPress={() => {
-                        props.navigation.navigate({ routeName: 'SignUp' });
+                        props.navigation.navigate({ name: 'SignUp' });
                     }}
                 />
             </View>
