@@ -35,9 +35,9 @@ const SignUpScreen = props => {
             .then(response => response.json())
             .then(responseJson => {
                 console.log(responseJson);
-                const {auth_token} = responseJson;
+                const { auth_token } = responseJson;
                 console.log(auth_token);
-                props.navigation.navigate({ routeName: 'LoggedIn', params:{token: auth_token}});
+                props.navigation.navigate({ name: 'LoggedIn', params: { token: auth_token } });
                 //AsyncStorage.clear();
                 //AsyncStorage.setItem('token', responseJson);
             })
@@ -101,7 +101,15 @@ const SignUpScreen = props => {
                             title='submit'
                             color={'black'}
                             //onPress={createNewUser}
-                            onPress = {() => props.navigation.navigate({ routeName: 'Landing', params:{token: 'heloooooooo'}})}
+                            onPress={() => props.navigation.navigate('LoggedIn', {
+                                screen: 'LandingPage',
+                                params: {
+                                    screen: 'Landing',
+                                    params: {
+                                        token: 'heloooooooo',
+                                    },
+                                },
+                            })}
                         />
                     </View>
                 </View>

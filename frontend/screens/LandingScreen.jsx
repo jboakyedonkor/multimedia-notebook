@@ -6,19 +6,21 @@ import { Ionicons, FontAwesome } from '@expo/vector-icons';
 
 const LandingScreen = props => {
 
-    const token = props.navigation.getParam('token');
-    console.log(token)
+    //const token = props.route.params.token;
+    //console.log(token)
 
     //this fetches the token from async storage
         //let temp = AsyncStorage.getItem('token');
         //token.current = temp;
     
 
-    //const token = props.navigation.getParams('token')
+    const token = props.route.params ? props.route.params.token : null;
+
     return (
         <View style={styles.screen}>
-            <Text>Welcome home {}</Text>
+            <Text>Welcome home</Text>
             <Text>{token}</Text>
+            
         </View>
     )
 }

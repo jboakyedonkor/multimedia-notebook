@@ -15,13 +15,4 @@ Expo CLI: npm install -g expo-cli
 
 Expo font: run "expo install expo-font"
 
-React-navigation: run "npm install react-navigation"
-
-then run 
-"expo install react-native-gesture-handler react-native-reanimated react-native-screens react-native-safe-area-context @react-native-community/masked-view"
-
-React-navigation-stack: run "npm install --save react-navigation-stack"
-
-React-navigation-tab: run "npm install --save react-navigation-tabs"
-
-React-navigation-drawer: run "npm install --save react-navigation-drawer"
+run "npm install" and this should install all dependencies found in the package.json 
