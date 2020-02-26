@@ -1,11 +1,30 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import ReduxThunk from 'redux-thunk';
+import {Provider} from 'react-redux';
+import { createStore, combineReducers, applyMiddleware} from 'redux';
 import * as Font from 'expo-font';
 import {AppLoading} from 'expo';
 import {enableScreens} from 'react-native-screens';
 import MainAppNavigator from './navigation/MainAppNavigator';
 
+
+import authReducer from './store/reducers/auth';
+
+
 enableScreens();
+
+const middlewares = [ReduxThunk]
+
+const rootReducer = combineReducers({
+  auth: authReducer
+})
+
+//create the redux store
+const store = createStore(rootReducer, applyMiddleware(...middlewares));
+
+
+
+
 //This is used to fetch and enable font use while the App Loads
 const fetchFonts = () => {
   return Font.loadAsync({
@@ -32,6 +51,8 @@ export default function App() {
 
 
   return (
-    <MainAppNavigator />
+    <Provider store = {store}>
+      <MainAppNavigator />
+    </Provider>
   );
 }
