@@ -2,9 +2,12 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, Dimensions, TouchableWithoutFeedback, Keyboard, Button, AsyncStorage } from 'react-native';
 
 import NewUser from '../models/NewUser';
+import {useDispatch} from 'react-redux';
 
 import Input from '../components/Input';
 import CustomButton from '../components/CustomButton';
+import * as authActions from '../store/actions/auth';
+import auth from '../store/reducers/auth';
 
 
 
@@ -16,32 +19,10 @@ const SignUpScreen = props => {
     const [username, setUsername] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
 
-    createNewUser = async () => {
-        console.log('new user')
-        return fetch('http://10.140.160.159:8000/api/create-user', {
-            method: 'POST',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                username: username,
-                password: password,
-                email: email,
-                first_name: firstname,
-                last_name: lastname
-            }),
-        })
-            .then(response => response.json())
-            .then(responseJson => {
-                console.log(responseJson);
-                const { auth_token } = responseJson;
-                console.log(auth_token);
-                props.navigation.navigate({ name: 'LoggedIn', params: { token: auth_token } });
-                //AsyncStorage.clear();
-                //AsyncStorage.setItem('token', responseJson);
-            })
-            .catch(error => console.log(error));
+    const dispatch = useDispatch();
+
+    const signUpHandler = () => {
+        dispatch(authActions.signup({email, firstname,lastname,password,username}));
     }
 
     return (
@@ -100,16 +81,7 @@ const SignUpScreen = props => {
                             style={{ backgroundColor: '#DA4633' }}
                             title='submit'
                             color={'black'}
-                            //onPress={createNewUser}
-                            onPress={() => props.navigation.navigate('LoggedIn', {
-                                screen: 'LandingPage',
-                                params: {
-                                    screen: 'Landing',
-                                    params: {
-                                        token: 'heloooooooo',
-                                    },
-                                },
-                            })}
+                            onPress = {signUpHandler}
                         />
                     </View>
                 </View>
