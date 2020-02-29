@@ -1,5 +1,6 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
+import { useSelector } from 'react-redux';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
@@ -15,6 +16,7 @@ import LandingScreen from '../screens/LandingScreen';
 import UserDashboardScreen from '../screens/UserDashboardScreen';
 import AddNoteScreen from '../screens/AddNoteScreen';
 import SearchScreen from '../screens/SearchScreen';
+import StartupScreen from '../screens/StartupScreen';
 
 
 const LandingPageStackNavigator = createStackNavigator();
@@ -84,46 +86,52 @@ const LoggedInNavigator = () => {
 }
 
 
-const AppStackNavigator = createStackNavigator();
-const AppNavigator = () => {
+const AuthStackNavigator = createStackNavigator();
+const AuthNavigator = () => {
     return (
-        <AppStackNavigator.Navigator>
-            <AppStackNavigator.Screen
+        <AuthStackNavigator.Navigator>
+            <AuthStackNavigator.Screen
                 name = 'Home'
                 component = {HomeScreen}
                 options = {{
                     headerShown: false
                 }}
             />
-            <AppStackNavigator.Screen
+            <AuthStackNavigator.Screen
                 name = 'Login'
                 component = {LoginScreen}
                 options = {{
                     headerShown: true
                 }}
             />
-            <AppStackNavigator.Screen
+            <AuthStackNavigator.Screen
                 name = 'SignUp'
                 component = {SignUpScreen}
                 options = {{
                     headerShown: false
                 }}
             />
-            <AppStackNavigator.Screen
+            <AuthStackNavigator.Screen
                 name = 'LoggedIn'
                 component = {LoggedInNavigator}
                 options = {{
                     headerShown: false
                 }}
             />
-        </AppStackNavigator.Navigator>
+        </AuthStackNavigator.Navigator>
     )
 }
 const MainAppNavigator = props => {
+
+    const isAuth = useSelector(state => !!state.auth.token);
+    const didTryAutoLogin = useSelector(state => state.auth.didTryAutoLogin);
+
     return (
-        <NavigationContainer>
-            <AppNavigator />
-        </NavigationContainer>
+    <NavigationContainer>
+      {isAuth && <LoggedInNavigator />}
+      {!isAuth && didTryAutoLogin && <AuthNavigator />}
+      {!isAuth && !didTryAutoLogin && <StartupScreen />}
+    </NavigationContainer>
     )
 }
 

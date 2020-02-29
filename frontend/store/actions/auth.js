@@ -2,24 +2,30 @@ import { AsyncStorage } from 'react-native';
 
 //dispatch action types for redux defined below
 export const AUTHENTICATE = 'AUTHENTICATE';
+export const LOGOUT = 'LOGOUT';
+export const SET_DID_TRY_AL = 'SET_DID_TRY_AL';
 
 
-export const authenticate = (userId, token, name) => {
-    
-    
+export const setDidTryAL = () => {
+    return { type: SET_DID_TRY_AL };
+};
+
+export const authenticate = (userId, token) => {
+
+
     return dispatch => {
         //dispatch action to reducer
-        dispatch( {type: AUTHENTICATE, userId: userId, token: token, name: name})
+        dispatch({ type: AUTHENTICATE, userId: userId, token: token })
     }
 }
 
 export const signup = (userSignupInfomation) => {
 
-    const {username, password, email, firstname, lastname} = userSignupInfomation;
+    const { username, password, email, firstname, lastname } = userSignupInfomation;
 
     return async dispatch => {
         const response = await fetch(
-            'http://10.136.172.26:8000/api/create-user',
+            'http://10.140.152.236:8000/api/create-user',
             {
                 method: 'POST',
                 headers: {
@@ -34,49 +40,103 @@ export const signup = (userSignupInfomation) => {
                     last_name: lastname
                 }),
             })
-            .catch(error => console.log(error))
+        //.catch(error => console.log(error))
 
-            //handle server error
-            if(!response.ok){
-                const errorResData = await response.json();
-                throw new Error('Something went wrong!');
-            }
+        //handle server error
+        if (!response.ok) {
+            const errorResData = await response.json();
+            throw new Error('Something went wrong!');
+
+        } else {
 
             //check the returned token
             const resData = await response.json();
 
             //debug statement, REMEMBER TO REMOVE
-            console.log("Printing token object at ACTION " +resData.auth_token);
-            console.log('username:' +username);
-            console.log('token:' +resData.auth_token);
-            console.log('name:' +username+" "+lastname);
+            console.log("Printing token object at SIGNUP " + resData.auth_token);
+            console.log('username:' + username);
+            console.log('token:' + resData.auth_token);
 
-            
+
             //dispatch action to authenticate method
             dispatch(
                 authenticate(
                     username,
-                    resData.auth_token,
-                    firstname+" "+lastname
+                    resData.auth_token
                 )
             );
-            
-            saveDataToStorage(username, resData.auth_token,firstname+" "+lastname);
 
-            
+            saveDataToStorage(username, resData.auth_token);
+        }
+
+
     }
 
 }
 
+export const login = userLoginInformation => {
+    const { username, password } = userLoginInformation;
+    return async dispatch => {
+        const response = await fetch(
+            'http://10.140.152.236:8000/api/api-token-auth/',
+            {
+                method: 'POST',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    username: username,
+                    password: password
+                }),
+            })
+        //.catch(error => console.log(error))
+
+        //handle server error
+        if (!response.ok) {
+            const errorResData = await response.json();
+            throw new Error('Something went wrong!');
+
+        } else {
+
+            //check the returned token
+            const resData = await response.json();
+
+            //debug statement, REMEMBER TO REMOVE
+            console.log("Printing token object at LOGIN " + resData.token);
+            console.log('username:' + username);
+            console.log('token:' + resData.token);
 
 
-const saveDataToStorage = (userId, token, name) => {
+            //dispatch action to authenticate method
+            dispatch(
+                authenticate(
+                    username,
+                    resData.token
+                )
+            );
+
+            saveDataToStorage(username, resData.token);
+        }
+
+
+    }
+
+}
+
+export const logout = () => {
+    AsyncStorage.removeItem('userData');
+    return {type: LOGOUT}
+};
+
+
+
+const saveDataToStorage = (userId, token) => {
     AsyncStorage.setItem(
         'userData',
         JSON.stringify({
             token: token,
-            userId: userId,
-            name: name
+            userId: userId
         })
     )
 

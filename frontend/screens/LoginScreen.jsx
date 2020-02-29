@@ -1,43 +1,72 @@
-import React, {useState} from 'react';
-import { View, StyleSheet, Text, Button, Dimensions } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, StyleSheet, Text, ActivityIndicator, Dimensions, Alert } from 'react-native';
+import { useDispatch } from 'react-redux';
 
 
 import Input from '../components/Input';
 import CustomButton from '../components/CustomButton';
+import * as authActions from '../store/actions/auth';
 
 
 const LoginScreen = props => {
-    const [email, setEmail] = useState('');
+    const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState();
+
+
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        if (error) {
+            Alert.alert('An error occurred', error, [{ text: 'Okay' }]);
+        }
+    }, [error]);
+
+    const LoginHandler = async () => {
+        setError(null);
+        setIsLoading(true);
+        try {
+            await dispatch(authActions.login({ username, password }));
+        }
+        catch (err) {
+            setError(err.message);
+            setIsLoading(false);
+        }
+    }
 
     //to show two way binding between text input and state values
     //console.log(email);
     //console.log(password);
     return (
         <View style={styles.screen}>
-            <View style = {styles.textContainer}>
+            <View style={styles.textContainer}>
                 <Text style={styles.text}>Log in or sign up for free!</Text>
             </View>
             <View>
                 <Input
-                    placeholder={'Email'}
+                    placeholder={'Username'}
                     style={styles.input}
-                    value = {email}
-                    onChangeText={text => setEmail(text)}
+                    value={username}
+                    onChangeText={text => setUsername(text)}
                 />
                 <Input
                     placeholder={'Password'}
                     style={styles.input}
-                    textContentType ={'password'}
+                    textContentType={'password'}
                     secureTextEntry={true}
-                    value = {password}
+                    value={password}
                     onChangeText={text => setPassword(text)}
                 />
-                <CustomButton
-                    style = {{backgroundColor: '#DA4633'}}
-                    title = {'Sign In'}
-                    color = {'black'}
-                />
+                {isLoading ? (
+                    <ActivityIndicator size='small' color={'#DA4633'} />
+                ) : (
+                        <CustomButton
+                            style={{ backgroundColor: '#DA4633' }}
+                            title={'Sign In'}
+                            color={'black'}
+                            onPress={LoginHandler}
+                        />)}
             </View>
         </View>
     )
@@ -60,7 +89,7 @@ const styles = StyleSheet.create({
     },
     input: {
         marginVertical: 10,
-        width: Dimensions.get('window').width/1.3,
+        width: Dimensions.get('window').width / 1.3,
     }
 
 });
