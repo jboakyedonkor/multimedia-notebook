@@ -1,13 +1,12 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, Dimensions, TouchableWithoutFeedback, Keyboard, Button, AsyncStorage } from 'react-native';
+import React, { useState, useEffect} from 'react';
+import { View, Text, StyleSheet, Dimensions, TouchableWithoutFeedback, Keyboard, ActivityIndicator, Alert } from 'react-native';
 
 import NewUser from '../models/NewUser';
-import {useDispatch} from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 import Input from '../components/Input';
 import CustomButton from '../components/CustomButton';
 import * as authActions from '../store/actions/auth';
-import auth from '../store/reducers/auth';
 
 
 
@@ -18,11 +17,28 @@ const SignUpScreen = props => {
     const [password, setPassword] = useState('');
     const [username, setUsername] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState();
 
     const dispatch = useDispatch();
 
-    const signUpHandler = () => {
-        dispatch(authActions.signup({email, firstname,lastname,password,username}));
+    useEffect(() => {
+        if (error){
+            Alert.alert('An error occurred', error, [{text: 'Okay'}]);
+        }
+    },[error]);
+
+    const signUpHandler = async () => {
+
+        setError(null);
+        setIsLoading(true);
+        try {
+        await dispatch(authActions.signup({ email, firstname, lastname, password, username }));
+        }
+        catch(err){
+            setError(err.message);
+        }
+        setIsLoading(false);
     }
 
     return (
@@ -77,12 +93,15 @@ const SignUpScreen = props => {
                         onChangeText={text => setConfirmPassword(text)}
                     />
                     <View style={styles.buttonContainer}>
-                        <CustomButton
-                            style={{ backgroundColor: '#DA4633' }}
-                            title='submit'
-                            color={'black'}
-                            onPress = {signUpHandler}
-                        />
+                        {isLoading ? (
+                            <ActivityIndicator size='small' color={'#DA4633'} />
+                        ) : (
+                                <CustomButton
+                                    style={{ backgroundColor: '#DA4633' }}
+                                    title='submit'
+                                    color={'black'}
+                                    onPress={signUpHandler}
+                                />)}
                     </View>
                 </View>
             </View>
