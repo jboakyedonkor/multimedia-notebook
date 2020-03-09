@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.core.mail import send_mail
 from django.contrib.auth.models import Group, User
 from django.contrib.auth import authenticate, login
 from rest_framework import status
@@ -9,6 +10,8 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from .models import Note, Tag
 from .serializers import NoteSerializer , TagSerializer
+import dotenv
+import os
 
 # Create your views here.
 
@@ -26,6 +29,8 @@ def create_new_user(request):
             last_name=body['last_name'])
         token,created = Token.objects.get_or_create(user=user)
         message = {"auth_token":"Token "+token.key}
+        
+        send_mail("Account created for Multimedia","Welcome to Multimedia notebook",'from@example.com',[user.email],fail_silently=False)
         return Response(
             message,
             status=status.HTTP_201_CREATED,
