@@ -14,7 +14,7 @@ import LoginScreen from '../screens/LoginScreen';
 import SignUpScreen from '../screens/SignUpScreen';
 import LandingScreen from '../screens/LandingScreen';
 import UserDashboardScreen from '../screens/UserDashboardScreen';
-import AddNoteScreen from '../screens/AddNoteScreen';
+import FavoritesScreen from '../screens/FavoritesScreen';
 import SearchScreen from '../screens/SearchScreen';
 import StartupScreen from '../screens/StartupScreen';
 
@@ -52,12 +52,12 @@ const LoggedInNavigator = () => {
                 }}
             />
             <LoggedInTabNavigator.Screen
-                name='AddNote'
-                component={AddNoteScreen}
+                name='Favorites'
+                component={FavoritesScreen}
                 options={{
-                    tabBarLabel: 'New Note',
+                    tabBarLabel: 'Favorites',
                     tabBarIcon: ({ color, size }) => {
-                        return <Ionicons name='ios-add-circle-outline' size= {size} color = {color}/>
+                        return <Ionicons name='ios-star' size= {size} color = {color}/>
                     }
                 }}
             />
