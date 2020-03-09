@@ -2,12 +2,12 @@ import React from 'react';
 import {SafeAreaView, View, Text, StyleSheet} from 'react-native';
 
 
-const AddNoteScreen = props => {
+const FavoritesScreen = props => {
     
     return (
 
         <SafeAreaView style = {styles.screen}>
-            <Text>Add Note screen</Text>
+            <Text>Favorites screen</Text>
         </SafeAreaView>
     )
 }
@@ -22,4 +22,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default AddNoteScreen;
+export default FavoritesScreen;

@@ -4,6 +4,7 @@ import { AsyncStorage } from 'react-native';
 export const AUTHENTICATE = 'AUTHENTICATE';
 export const LOGOUT = 'LOGOUT';
 export const SET_DID_TRY_AL = 'SET_DID_TRY_AL';
+export const BASE_URL = '10.136.144.47';
 
 
 export const setDidTryAL = () => {
@@ -25,7 +26,7 @@ export const signup = (userSignupInfomation) => {
 
     return async dispatch => {
         const response = await fetch(
-            'http://10.140.152.236:8000/api/create-user',
+            `http://${BASE_URL}:8000/api/create-user`,
             {
                 method: 'POST',
                 headers: {
@@ -78,7 +79,7 @@ export const login = userLoginInformation => {
     const { username, password } = userLoginInformation;
     return async dispatch => {
         const response = await fetch(
-            'http://10.140.152.236:8000/api/api-token-auth/',
+            `http://${BASE_URL}:8000/api/api-token-auth/`,
             {
                 method: 'POST',
                 headers: {
@@ -107,16 +108,18 @@ export const login = userLoginInformation => {
             console.log('username:' + username);
             console.log('token:' + resData.token);
 
+            const token = "Token "+resData.token;
+
 
             //dispatch action to authenticate method
             dispatch(
                 authenticate(
                     username,
-                    resData.token
+                    token
                 )
             );
 
-            saveDataToStorage(username, resData.token);
+            saveDataToStorage(username, token);
         }
 
 
