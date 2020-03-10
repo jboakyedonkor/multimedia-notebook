@@ -9,7 +9,7 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from .models import Note, Tag
-from .serializers import NoteSerializer , TagSerializer
+from .serializers import NoteSerializer, TagSerializer, UserSerializer
 import dotenv
 import os
 
@@ -27,16 +27,29 @@ def create_new_user(request):
             body['password'],
             first_name=body['first_name'],
             last_name=body['last_name'])
-        token,created = Token.objects.get_or_create(user=user)
-        message = {"auth_token":"Token "+token.key}
-        
-        send_mail("Account created for Multimedia","Welcome to Multimedia notebook",'from@example.com',[user.email],fail_silently=False)
+        token, created = Token.objects.get_or_create(user=user)
+        message = {"auth_token": "Token " + token.key}
+
+        send_mail("Account created for Multimedia",
+                  "Welcome to Multimedia notebook",
+                  'from@example.com',
+                  [user.email],
+                  fail_silently=False)
         return Response(
             message,
             status=status.HTTP_201_CREATED,
             content_type='application/json')
     except KeyError:
         return Response(status=status.HTTP_200_OK)
+
+
+@api_view(['GET'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def get_user(request):
+
+    serializer = UserSerializer(request.user)
+    return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 @api_view(['GET'])
@@ -135,7 +148,7 @@ def update_note(request):
             message,
             status=status.HTTP_204_NO_CONTENT,
             content_type='application/json')
-            
+
 
 @api_view(['POST'])
 @authentication_classes([TokenAuthentication])
@@ -143,16 +156,18 @@ def update_note(request):
 def create_tag(request):
     body = request.data
     try:
-        tag, created = Tag.objects.get_or_create(name=body['name'],user = request.user)
+        tag, created = Tag.objects.get_or_create(
+            name=body['name'], user=request.user)
         if created:
-            serializer =  TagSerializer(tag)
-            return Response(serializer.data,status= status.HTTP_201_CREATED)
+            serializer = TagSerializer(tag)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
-            message = {"message" : "tag already exists"}
-            return Response(message, status= status.HTTP_200_OK)
-            
+            message = {"message": "tag already exists"}
+            return Response(message, status=status.HTTP_200_OK)
+
     except KeyError:
-        return Response(status= status.HTTP_400_BAD_REQUEST)
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
 
 @api_view(['PUT'])
 @authentication_classes([TokenAuthentication])
@@ -160,11 +175,15 @@ def create_tag(request):
 def update_tag(request):
     body = request.data
     try:
-        current_tag = Tag.objects.get(name=body['current_name'],user=request.user)
+        current_tag = Tag.objects.get(
+            name=body['current_name'], user=request.user)
         current_tag.name = body['new_name']
         current_tag.save()
         serializer = TagSerializer(current_tag)
-        return Response(serializer.data,status=status.HTTP_200_OK, content_type='application/json')
+        return Response(
+            serializer.data,
+            status=status.HTTP_200_OK,
+            content_type='application/json')
 
     except Tag.DoesNotExist:
         message = {"error": "tag not found"}
@@ -172,7 +191,7 @@ def update_tag(request):
             message,
             status=status.HTTP_204_NO_CONTENT,
             content_type='application/json')
-        
+
 
 @api_view(['DELETE'])
 @authentication_classes([TokenAuthentication])
@@ -197,6 +216,7 @@ def delete_tag(request):
             status=status.HTTP_204_NO_CONTENT,
             content_type='application/json')
 
+
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
@@ -205,7 +225,7 @@ def get_tag(request):
     try:
         current_tag = Tag.objects.get(name=body['name'], user=request.user)
         serializer = TagSerializer(current_tag)
-        
+
         return Response(
             serializer.data,
             status=status.HTTP_200_OK,
