@@ -14,7 +14,6 @@ export const fetchNotes = () => {
         const token = getState().auth.token;
         console.log("HERE AT ACTION: "+token)
         try {
-            
             const response = await fetch(
                 `http://${BASE_URL}:8000/api/get-note`, {
                     headers: {

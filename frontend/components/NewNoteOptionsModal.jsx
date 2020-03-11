@@ -42,7 +42,6 @@ const NewNoteOptionsModal = props => {
                         <View style = {styles.button}>
                             <Button
                                 title='Record audio'
-                                color = 'white'
                             />
                         </View>
                     </View>
@@ -57,7 +56,6 @@ const NewNoteOptionsModal = props => {
                         <View style = {styles.button}>
                             <Button
                                 title='Add attachment'
-                                color = 'white'
                             />
                         </View>
                     </View>
@@ -72,8 +70,7 @@ const NewNoteOptionsModal = props => {
                         </View>
                         <View style = {styles.button}>
                             <Button
-                                title='Stark sketching'
-                                color = 'white'
+                                title='Start sketching'
                             />
                         </View>
                     </View>
@@ -89,7 +86,6 @@ const NewNoteOptionsModal = props => {
                         <View style = {styles.button}>
                             <Button
                                 title='Take photo'
-                                color = 'white'
                             />
                         </View>
                     </View>
@@ -105,7 +101,6 @@ const NewNoteOptionsModal = props => {
                         <View style = {styles.button}>
                             <Button
                                 title='Blank note'
-                                color = 'white'
                             />
                         </View>
                     </View>
@@ -148,7 +143,6 @@ const styles = new StyleSheet.create({
         paddingRight: 10
     },
     button: {
-        
     }
 
 });
