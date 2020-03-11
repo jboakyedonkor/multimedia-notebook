@@ -17,6 +17,7 @@ import UserDashboardScreen from '../screens/UserDashboardScreen';
 import FavoritesScreen from '../screens/FavoritesScreen';
 import SearchScreen from '../screens/SearchScreen';
 import StartupScreen from '../screens/StartupScreen';
+import BlankNoteScreen from '../screens/BlankNoteScreen';
 
 
 const LandingPageStackNavigator = createStackNavigator();
@@ -28,6 +29,12 @@ export const LandingPageNavigator = () => {
                 component={LandingScreen}
                 options={{ headerTitle: 'Home' }}
             />
+
+            <LandingPageStackNavigator.Screen
+                name='BlankScreen'
+                component={BlankNoteScreen}
+                options={{ headerTitle: 'Blank Note' }}
+            />
         </LandingPageStackNavigator.Navigator>
     )
 
@@ -37,17 +44,17 @@ const LoggedInTabNavigator = createBottomTabNavigator();
 const LoggedInNavigator = () => {
     return (
         <LoggedInTabNavigator.Navigator
-            tabBarOptions = {{
+            tabBarOptions={{
                 activeTintColor: '#DA4633'
             }}
         >
             <LoggedInTabNavigator.Screen
-                name= 'LandingPage'
+                name='LandingPage'
                 component={LandingPageNavigator}
                 options={{
                     tabBarLabel: 'Home',
                     tabBarIcon: ({ color, size }) => {
-                        return <FontAwesome name='home' size= {size} color = {color}/>
+                        return <FontAwesome name='home' size={size} color={color} />
                     }
                 }}
             />
@@ -57,27 +64,27 @@ const LoggedInNavigator = () => {
                 options={{
                     tabBarLabel: 'Favorites',
                     tabBarIcon: ({ color, size }) => {
-                        return <Ionicons name='ios-star' size= {size} color = {color}/>
+                        return <Ionicons name='ios-star' size={size} color={color} />
                     }
                 }}
             />
             <LoggedInTabNavigator.Screen
-                name= 'Search'
+                name='Search'
                 component={SearchScreen}
                 options={{
                     tabBarLabel: 'Search',
                     tabBarIcon: ({ color, size }) => {
-                        return <Ionicons name='ios-search' size= {size} color = {color}/>
+                        return <Ionicons name='ios-search' size={size} color={color} />
                     }
                 }}
             />
             <LoggedInTabNavigator.Screen
-                name= 'UserDashboard'
+                name='UserDashboard'
                 component={UserDashboardScreen}
                 options={{
                     tabBarLabel: 'Me',
                     tabBarIcon: ({ color, size }) => {
-                        return <Ionicons name='md-person' size= {size} color = {color} />
+                        return <Ionicons name='md-person' size={size} color={color} />
                     }
                 }}
             />
@@ -91,30 +98,30 @@ const AuthNavigator = () => {
     return (
         <AuthStackNavigator.Navigator>
             <AuthStackNavigator.Screen
-                name = 'Home'
-                component = {HomeScreen}
-                options = {{
+                name='Home'
+                component={HomeScreen}
+                options={{
                     headerShown: false
                 }}
             />
             <AuthStackNavigator.Screen
-                name = 'Login'
-                component = {LoginScreen}
-                options = {{
+                name='Login'
+                component={LoginScreen}
+                options={{
                     headerShown: true
                 }}
             />
             <AuthStackNavigator.Screen
-                name = 'SignUp'
-                component = {SignUpScreen}
-                options = {{
+                name='SignUp'
+                component={SignUpScreen}
+                options={{
                     headerShown: false
                 }}
             />
             <AuthStackNavigator.Screen
-                name = 'LoggedIn'
-                component = {LoggedInNavigator}
-                options = {{
+                name='LoggedIn'
+                component={LoggedInNavigator}
+                options={{
                     headerShown: false
                 }}
             />
@@ -127,11 +134,11 @@ const MainAppNavigator = props => {
     const didTryAutoLogin = useSelector(state => state.auth.didTryAutoLogin);
 
     return (
-    <NavigationContainer>
-      {isAuth && <LoggedInNavigator />}
-      {!isAuth && didTryAutoLogin && <AuthNavigator />}
-      {!isAuth && !didTryAutoLogin && <StartupScreen />}
-    </NavigationContainer>
+        <NavigationContainer>
+            {isAuth && <LoggedInNavigator />}
+            {!isAuth && didTryAutoLogin && <AuthNavigator />}
+            {!isAuth && !didTryAutoLogin && <StartupScreen />}
+        </NavigationContainer>
     )
 }
 
