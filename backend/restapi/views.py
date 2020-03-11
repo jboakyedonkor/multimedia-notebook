@@ -4,7 +4,8 @@ from django.contrib.auth.models import Group, User
 from django.contrib.auth import authenticate, login
 from rest_framework import status
 from rest_framework.authtoken.models import Token
-from rest_framework.decorators import api_view, authentication_classes, permission_classes
+from rest_framework.decorators import api_view, authentication_classes, permission_classes ,renderer_classes
+from rest_framework.renderers import JSONRenderer
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -17,6 +18,7 @@ import os
 
 
 @api_view(['POST'])
+@renderer_classes([JSONRenderer])
 def create_new_user(request):
     try:
         body = request.data
@@ -44,6 +46,7 @@ def create_new_user(request):
 
 
 @api_view(['GET'])
+@renderer_classes([JSONRenderer])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def get_user(request):
@@ -53,6 +56,7 @@ def get_user(request):
 
 
 @api_view(['GET'])
+@renderer_classes([JSONRenderer])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def get_note(request):
@@ -69,6 +73,7 @@ def get_note(request):
 
 
 @api_view(['POST'])
+@renderer_classes([JSONRenderer])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def create_note(request):
@@ -104,6 +109,7 @@ def create_note(request):
 
 
 @api_view(['DELETE'])
+@renderer_classes([JSONRenderer])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def delete_note(request):
@@ -126,6 +132,7 @@ def delete_note(request):
 
 
 @api_view(['PUT'])
+@renderer_classes([JSONRenderer])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def update_note(request):
@@ -151,6 +158,7 @@ def update_note(request):
 
 
 @api_view(['POST'])
+@renderer_classes([JSONRenderer])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def create_tag(request):
@@ -170,6 +178,7 @@ def create_tag(request):
 
 
 @api_view(['PUT'])
+@renderer_classes([JSONRenderer])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def update_tag(request):
@@ -194,6 +203,7 @@ def update_tag(request):
 
 
 @api_view(['DELETE'])
+@renderer_classes([JSONRenderer])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def delete_tag(request):
@@ -218,6 +228,7 @@ def delete_tag(request):
 
 
 @api_view(['GET'])
+@renderer_classes([JSONRenderer])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def get_tag(request):
