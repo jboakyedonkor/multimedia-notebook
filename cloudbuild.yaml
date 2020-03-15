@@ -23,6 +23,11 @@ steps:
     - '--build-arg'
     - 'SECRET_KEY_G=${_SECRET_KEY}'
     - './backend'
+  
+  # === push ===
+  - name: 'gcr.io/cloud-builders/docker'
+    id : 'PUSH CONTAINER'
+    args: ['push','gcr.io/$PROJECT_ID/mn-api']
     
   # == deploy ===
   - name: 'gcr.io/cloud-builders/gcloud'
