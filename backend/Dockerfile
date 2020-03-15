@@ -34,4 +34,4 @@ RUN apk add --no-cache \
 RUN python manage.py collectstatic --settings backend.settings.deployment && \
 python manage.py migrate --settings backend.settings.deployment
 
-ENTRYPOINT [ "gunicorn","-b","localhost:8080","backend.wsgi"]
+ENTRYPOINT [ "gunicorn","-b","0.0.0.0:8080","backend.wsgi"]
