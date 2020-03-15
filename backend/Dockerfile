@@ -29,9 +29,12 @@ RUN apk add --no-cache \
     musl-dev \
     postgresql-dev \
     && rm -rf ./backend/staticfiles \
+    && rm Dockerfile \
+    && echo $PORT
     && pip install --no-cache-dir -r requirements.txt 
 
 RUN python manage.py collectstatic --settings backend.settings.deployment && \
+python manage.py makemigrations --settings backend.settings.deployment && \
 python manage.py migrate --settings backend.settings.deployment
 
-ENTRYPOINT [ "gunicorn","-b","0.0.0.0:8080","backend.wsgi"]
+ENTRYPOINT [ "gunicorn","-b",":$PORT","backend.wsgi"]
