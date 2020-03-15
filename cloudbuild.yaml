@@ -39,7 +39,7 @@ steps:
     - '--image'
     - 'gcr.io/$PROJECT_ID/mn-api'
     - '--region'
-    - 'us-east1'
+    - 'us-east4'
     - '--platform'
     - 'managed'
     - '--allow-unauthenticated'
