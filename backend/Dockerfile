@@ -37,4 +37,4 @@ RUN python manage.py collectstatic --settings backend.settings.deployment && \
 python manage.py makemigrations --settings backend.settings.deployment && \
 python manage.py migrate --settings backend.settings.deployment
 
-ENTRYPOINT [ "gunicorn","-b",":$PORT","backend.wsgi"]
+ENTRYPOINT [ "python","manage.py","runserver","--settings","backend.settings.deployment","8080"]
