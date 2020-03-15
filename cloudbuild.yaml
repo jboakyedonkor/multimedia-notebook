@@ -6,7 +6,8 @@ steps:
     id: 'BUILD SERVER CONTAINER'
     args: 
     - 'build'
-    - '-t'
+    - '-t'    
+    - 'gcr.io/$PROJECT_ID/mn-api'
     - '--build-arg'
     - 'DB_USER_G=${_DB_USER}'
     - '--build-arg'
@@ -20,8 +21,7 @@ steps:
     - '--build-arg'
     - 'SENDGRID_API_KEY_G=${_SENDGRID_API_KEY}'    
     - '--build-arg'
-    - 'SECRET_KEY_G=${_SECRET_KEY}'    
-    - 'gcr.io/$PROJECT_ID/mn-api'
+    - 'SECRET_KEY_G=${_SECRET_KEY}'
     - './backend'
     
   # == deploy ===
