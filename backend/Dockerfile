@@ -30,7 +30,7 @@ RUN apk add --no-cache \
     postgresql-dev \
     && rm -rf ./backend/staticfiles \
     && rm Dockerfile \
-    && echo $PORT
+    && echo $PORT \
     && pip install --no-cache-dir -r requirements.txt 
 
 RUN python manage.py collectstatic --settings backend.settings.deployment && \
