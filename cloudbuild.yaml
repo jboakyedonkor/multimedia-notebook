@@ -21,7 +21,9 @@ steps:
     - '--build-arg'
     - 'SENDGRID_API_KEY_G=${_SENDGRID_API_KEY}'    
     - '--build-arg'
-    - 'SECRET_KEY_G=${_SECRET_KEY}'
+    - 'SECRET_KEY_G=${_SECRET_KEY}'    
+    - '--build-arg'
+    - 'GOOG_HOST_G=${_GOOG_HOST}'
     - './backend'
   
   # === push ===

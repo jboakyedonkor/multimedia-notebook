@@ -27,7 +27,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 DEBUG = True
 
 
-ALLOWED_HOSTS = ['localhost','0.0.0.0','127.0.0.1']
+ALLOWED_HOSTS = ['localhost','0.0.0.0','127.0.0.1',os.getenv('GOOG_HOST')]
 
 
 # Application definition
