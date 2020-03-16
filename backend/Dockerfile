@@ -19,12 +19,15 @@ ENV SECRET_KEY ${SECRET_KEY_G}
 
 
 ENV PORT 8080
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
+
 EXPOSE ${PORT}
 
 COPY . backend/
 WORKDIR backend/
 
-RUN apk add --no-cache \
+RUN  ls && apk add --no-cache \
     gcc \
     musl-dev \
     postgresql-dev \
@@ -33,8 +36,9 @@ RUN apk add --no-cache \
     && echo $PORT \
     && pip install --no-cache-dir -r requirements.txt 
 
-RUN python manage.py collectstatic --settings backend.settings.deployment && \
-python manage.py makemigrations --settings backend.settings.deployment && \
-python manage.py migrate --settings backend.settings.deployment
 
-ENTRYPOINT [ "python","manage.py","runserver","--settings","backend.settings.deployment","8080"]
+RUN python manage.py collectstatic --settings backend.settings.deployment 
+RUN python manage.py migrate --settings backend.settings.deployment
+
+
+ENTRYPOINT ["gunicorn", "backend.wsgi:application", "-b" ,"0.0.0.0:$PORT"]
