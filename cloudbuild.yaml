@@ -25,9 +25,9 @@ steps:
     - './backend'
   
   # === push ===
-  # - name: 'gcr.io/cloud-builders/docker'
-  #   id : 'PUSH CONTAINER'
-  #   args: ['push','gcr.io/$PROJECT_ID/mn-api']
+  - name: 'gcr.io/cloud-builders/docker'
+    id : 'PUSH CONTAINER'
+    args: ['push','gcr.io/$PROJECT_ID/mn-api']
 
   # == deploy ===
   - name: 'gcr.io/cloud-builders/gcloud'
