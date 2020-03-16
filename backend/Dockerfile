@@ -41,4 +41,4 @@ RUN python manage.py collectstatic --settings backend.settings.deployment
 RUN python manage.py migrate --settings backend.settings.deployment
 
 
-ENTRYPOINT ["gunicorn", "backend.wsgi:application", "-b" ,"0.0.0.0:$PORT"]
+ENTRYPOINT ["gunicorn", "backend.wsgi:application", "-b" ,"0.0.0.0:8080"]
