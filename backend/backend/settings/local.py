@@ -12,7 +12,23 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 
 import os
 import dotenv
-dotenv.load_dotenv('.'+os.sep+'app.env')
+import sys
+
+try:
+    curr_dirname = os.path.relpath(
+        os.getcwd(),
+        start=os.path.dirname(
+            os.getcwd()))
+    if curr_dirname == 'multimedia-notebook':
+        env_path = '.{}backend{}app.env'.format(os.sep, os.sep)
+    elif curr_dirname == 'backend':
+        env_path = '.{}app.env'.format(os.sep)
+
+    dotenv.load_dotenv(env_path)
+except NameError:
+    print('you should run the command from the multimedia-notebook{} or multimedia-notebook{}backend{}'.format(os.sep, os.sep, os.sep))
+    sys.exit()
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -26,7 +42,16 @@ SECRET_KEY = 'o-2j^#2-0lw3qi27d6b9o^8nn&6w6kz#qgrz0b^b=*na@*-@@!'
 DEBUG = True
 
 
-ALLOWED_HOSTS = ['10.136.112.92','localhost', '127.0.0.1', '192.168.145.1','10.136.228.131','10.140.214.99','10.140.82.122', '10.136.228.131', '10.140.160.159']
+ALLOWED_HOSTS = [
+    '10.136.112.92',
+    'localhost',
+    '127.0.0.1',
+    '192.168.145.1',
+    '10.136.228.131',
+    '10.140.214.99',
+    '10.140.82.122',
+    '10.136.228.131',
+    '10.140.160.159']
 
 
 # Application definition
@@ -39,7 +64,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'rest_framework.authtoken', 
+    'rest_framework.authtoken',
     'restapi'
 ]
 
