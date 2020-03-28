@@ -13,6 +13,7 @@ Dependencies are found in the backend folder
 ### Deploy local testing 
 ```
 $ cd backend
+$ python manage.py makemigrations restapi --settings backend.settings.local
 $ python manage.py migrate --settings backend.settings.local
 $ python manage.py runserver --settings backend.settings.local
 ```
