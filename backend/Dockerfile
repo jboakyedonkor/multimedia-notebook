@@ -46,7 +46,8 @@ RUN  ls && apk add --no-cache \
 
 
 RUN python manage.py collectstatic --settings backend.settings.deployment 
-RUN python manage.py migrate --settings backend.settings.deployment
+RUN python manage.py makemigrations restapi --settings backend.settings.deployment \
+    && python manage.py migrate --settings backend.settings.deployment
 
 
 ENTRYPOINT ["gunicorn", "backend.wsgi:application", "-b" ,"0.0.0.0:8080"]
