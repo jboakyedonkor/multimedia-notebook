@@ -1,4 +1,4 @@
-from . import views
+from . import views ,pass_views
 from django.urls import path, include
 from rest_framework.authtoken.views import obtain_auth_token
 
@@ -16,6 +16,8 @@ urlpatterns = [
     path('delete-tag', views.delete_tag, name='delete_tag'),
     path('update-tag', views.update_tag, name='update_tag'),
     path('get-tag', views.get_tag, name='get_tag'),
-    path('', include('rest_auth.urls') )
+    path('', include('rest_auth.urls') ),
+
+    path('update-password',pass_views.update_password,name='update-password')
 
 ]

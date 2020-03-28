@@ -55,7 +55,6 @@ def get_user(request):
     serializer = UserSerializer(request.user)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
-
 @api_view(['GET'])
 @renderer_classes([JSONRenderer])
 @authentication_classes([TokenAuthentication])
