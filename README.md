@@ -2,17 +2,37 @@
 A multimedia notebook for learning languages
 
 
-#steps needed before running React Native in frontend:
+## Running Django Backend
+ 
+### Install dependencies
 
-Make sure to cd into frontend before running
+Dependencies are found in the backend folder
 
-To run type 'npm start' and use expo to run on ios 
+```cd backend && pip install -r requirements.txt```
+
+### Deploy local testing 
+```
+$ cd backend
+$ python manage.py makemigrations restapi --settings backend.settings.local
+$ python manage.py migrate --settings backend.settings.local
+$ python manage.py runserver --settings backend.settings.local
+```
+If you want to create a superuser, run this before running the ```runserver``` command. You can login into the user account at the ```http://localhost:8000/admin/```. 
+
+## Running React Native Backend
 
 
-You need to install the following dependencies using React Native App. This assumes that you already have npm installed:
+### Install dependencies
+```
+$ cd frontend && npm install
+$ npm install -g expo-cli
+$ expo install expo-font
+```
 
-Expo CLI: npm install -g expo-cli
+### Run React Native App
 
-Expo font: run "expo install expo-font"
-
-run "npm install" and this should install all dependencies found in the package.json 
+To run the application
+```
+$ cd  frontend
+$ npm start
+```

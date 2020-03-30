@@ -15,5 +15,7 @@ urlpatterns = [
     path('create-tag', views.create_tag, name='create_tag'),
     path('delete-tag', views.delete_tag, name='delete_tag'),
     path('update-tag', views.update_tag, name='update_tag'),
-    path('get-tag', views.get_tag, name='get_tag')
+    path('get-tag', views.get_tag, name='get_tag'),
+    path('', include('rest_auth.urls') )
+
 ]

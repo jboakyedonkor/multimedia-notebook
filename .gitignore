@@ -137,3 +137,6 @@ node-modules/
 
 #env files
 *.env
+
+*staticfiles/
+*migrations/

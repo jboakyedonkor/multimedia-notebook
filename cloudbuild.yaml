@@ -1,0 +1,47 @@
+steps:
+
+  #===build===
+
+  - name: 'gcr.io/cloud-builders/docker'
+    id: 'BUILD SERVER CONTAINER'
+    args: 
+    - 'build'
+    - '-t'    
+    - 'gcr.io/$PROJECT_ID/mn-api'
+    - '--build-arg'
+    - 'DB_USER_G=${_DB_USER}'
+    - '--build-arg'
+    - 'DB_NAME_G=${_DB_NAME}'    
+    - '--build-arg'
+    - 'DB_PASSWORD_G=${_DB_PASSWORD}'    
+    - '--build-arg'
+    - 'DB_HOST_G=${_DB_HOST}'    
+    - '--build-arg'
+    - 'DB_PORT_G=${_DB_PORT}'    
+    - '--build-arg'
+    - 'SENDGRID_API_KEY_G=${_SENDGRID_API_KEY}'    
+    - '--build-arg'
+    - 'SECRET_KEY_G=${_SECRET_KEY}'    
+    - '--build-arg'
+    - 'GOOG_HOST_G=${_GOOG_HOST}'
+    - './backend'
+  
+  # === push ===
+  - name: 'gcr.io/cloud-builders/docker'
+    id : 'PUSH CONTAINER'
+    args: ['push','gcr.io/$PROJECT_ID/mn-api']
+
+  # == deploy ===
+  - name: 'gcr.io/cloud-builders/gcloud'
+    id: 'DEPLOY SERVER'
+    args:
+    - 'run'
+    - 'deploy'
+    - 'mn-api'
+    - '--image'
+    - 'gcr.io/$PROJECT_ID/mn-api'
+    - '--region'
+    - 'us-east4'
+    - '--platform'
+    - 'managed'
+    - '--allow-unauthenticated'
