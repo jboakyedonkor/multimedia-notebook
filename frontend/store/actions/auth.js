@@ -4,7 +4,7 @@ import { AsyncStorage } from 'react-native';
 export const AUTHENTICATE = 'AUTHENTICATE';
 export const LOGOUT = 'LOGOUT';
 export const SET_DID_TRY_AL = 'SET_DID_TRY_AL';
-export const BASE_URL = '10.136.144.47';
+export const BASE_URL = '10.140.23.82';
 
 
 export const setDidTryAL = () => {

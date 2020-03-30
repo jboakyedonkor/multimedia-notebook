@@ -15,14 +15,15 @@ const NewNoteButton = props => {
             <CustomButton
                 title='New Note'
                 style={styles.button1}
-                color={'white'}
+                onPress = {props.openBlankNote}
+                //color={'white'}
             />
 
             <CustomButton
                 title='...'
                 onPress={props.showNewNoteOptions}
                 style={styles.button2}
-                color={'white'}
+                //color={'white'}
             />
         </View>
     )

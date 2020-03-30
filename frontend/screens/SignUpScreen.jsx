@@ -1,5 +1,5 @@
 import React, { useState, useEffect} from 'react';
-import { View, Text, StyleSheet, Dimensions, TouchableWithoutFeedback, Keyboard, ActivityIndicator, Alert } from 'react-native';
+import { View, Text, StyleSheet, Dimensions, TouchableWithoutFeedback, Keyboard, ActivityIndicator, Alert, SafeAreaView } from 'react-native';
 
 import NewUser from '../models/NewUser';
 import { useDispatch } from 'react-redux';
@@ -111,7 +111,8 @@ const SignUpScreen = props => {
 
 const styles = StyleSheet.create({
     screen: {
-        flex: 1,
+        height: '100%',
+        width: '100%',
         paddingHorizontal: 15,
         paddingVertical: 50,
         justifyContent: "center"

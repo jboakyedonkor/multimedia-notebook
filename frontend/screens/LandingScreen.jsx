@@ -25,6 +25,10 @@ const LandingScreen = props => {
         setModalIsVisible(true);
     }
 
+    openBlankScreen = () => {
+        props.navigation.navigate({ name: 'BlankScreen' });
+    }
+
     /*
     useEffect(() => {
         try{
@@ -46,6 +50,7 @@ const LandingScreen = props => {
             <View style = {styles.newNoteButtonContainer}>
                 <NewNoteButton
                     showNewNoteOptions = {displayNewNoteOptionModal}
+                    openBlankNote = {openBlankScreen}
                 />
             </View>
 
@@ -59,8 +64,6 @@ const styles = StyleSheet.create({
         width: '100%',
         //justifyContent: 'center',
         alignItems: 'center',
-        borderWidth: 3,
-        borderColor: 'black'
     },
     newNoteButtonContainer: {
         height: '100%',
