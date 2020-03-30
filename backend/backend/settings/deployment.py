@@ -11,22 +11,24 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
-
+import dotenv
+dotenv.load_dotenv('.'+os.sep+'app.env')
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
+print(os.getcwd())
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'o-2j^#2-0lw3qi27d6b9o^8nn&6w6kz#qgrz0b^b=*na@*-@@!'
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 
-ALLOWED_HOSTS = ['10.136.112.92','localhost', '127.0.0.1', '10.140.32.150', '10.140.147.67', '10.136.144.47']
+ALLOWED_HOSTS = ['localhost','0.0.0.0','127.0.0.1',os.getenv('GOOG_HOST')]
+
 
 # Application definition
 
@@ -78,8 +80,13 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': os.getenv('DB_NAME'),
+        'USER': os.getenv('DB_USER'),
+        'PASSWORD':os.getenv('DB_PASSWORD'),
+        'HOST' :os.getenv('DB_HOST'),
+        'PORT' : os.getenv('DB_PORT')
+
     }
 }
 
@@ -121,3 +128,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
+STATIC_ROOT = os.path.join(BASE_DIR,"staticfiles")
+
+SENDGRID_API_KEY = os.getenv('SENDGRID_API_KEY')
+SENDGRID_SANDBOX_MODE_IN_DEBUG = False
+
+EMAIL_BACKEND = 'sendgrid_backend.SendgridBackend'

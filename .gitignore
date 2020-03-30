@@ -134,3 +134,9 @@ node-modules/
 
 #vscode
 .vscode/
+
+#env files
+*.env
+
+*staticfiles/
+*migrations/
