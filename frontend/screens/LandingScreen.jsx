@@ -64,7 +64,6 @@ const styles = StyleSheet.create({
         width: '100%',
         //justifyContent: 'center',
         alignItems: 'center',
-        borderWidth: 3,
     },
     newNoteButtonContainer: {
         height: '100%',

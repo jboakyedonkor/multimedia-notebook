@@ -5,7 +5,7 @@ export const SET_NOTES = 'SET_NOTES';
 export const CREATE_NOTE = 'CREATE_NOTE';
 export const UPDATE_NOTE = 'UPDATE_NOTE';
 export const DELETE_NOTE = 'DELETE_NOTE';
-export const BASE_URL = '10.136.144.47';
+export const BASE_URL = '10.140.23.82';
 
 
 export const fetchNotes = () => {
