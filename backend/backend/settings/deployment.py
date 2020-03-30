@@ -131,7 +131,13 @@ STATIC_URL = '/static/'
 
 STATIC_ROOT = os.path.join(BASE_DIR,"staticfiles")
 
-SENDGRID_API_KEY = os.getenv('SENDGRID_API_KEY')
-SENDGRID_SANDBOX_MODE_IN_DEBUG = False
+# SENDGRID_API_KEY = os.getenv('SENDGRID_API_KEY')
+# SENDGRID_SANDBOX_MODE_IN_DEBUG = False
 
-EMAIL_BACKEND = 'sendgrid_backend.SendgridBackend'
+# EMAIL_BACKEND = 'sendgrid_backend.SendgridBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = os.getenv("EMAIL_HOST")
+EMAIL_USE_TLS = True
+EMAIL_PORT = int(os.getenv("EMAIL_PORT"))
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
