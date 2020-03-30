@@ -1,7 +1,5 @@
-from django.shortcuts import render
 from django.core.mail import send_mail
-from django.contrib.auth.models import Group, User
-from django.contrib.auth import views as auth_views
+from django.contrib.auth.models import User
 from rest_framework.authtoken.models import Token
 from rest_framework import status
 from rest_framework.response import Response

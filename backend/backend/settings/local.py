@@ -21,6 +21,7 @@ try:
             os.getcwd()))
     if curr_dirname == 'multimedia-notebook':
         env_path = '.{}backend{}app.env'.format(os.sep, os.sep)
+        
     elif curr_dirname == 'backend':
         env_path = '.{}app.env'.format(os.sep)
 
@@ -65,6 +66,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework.authtoken',
+    'rest_auth',
     'restapi'
 ]
 
@@ -83,7 +85,7 @@ ROOT_URLCONF = 'backend.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR,'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -148,7 +150,12 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-SENDGRID_API_KEY = os.getenv('SENDGRID_API_KEY')
-SENDGRID_SANDBOX_MODE_IN_DEBUG = False
+# SENDGRID_API_KEY = os.getenv('SENDGRID_API_KEY')
+# SENDGRID_SANDBOX_MODE_IN_DEBUG = False
 
-EMAIL_BACKEND = 'sendgrid_backend.SendgridBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = os.getenv("EMAIL_HOST")
+EMAIL_USE_TLS = True
+EMAIL_PORT = int(os.getenv("EMAIL_PORT"))
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
