@@ -23,17 +23,21 @@ def create_note(request):
     keys = set(body.keys())
 
     if not {'name', 'text', 'video_link', 'audio_link'}.issubset(keys):
-        return Response(
-            {
-                'error': 'missing required parameters:[name, text, video_link, audio_link]'},
+        return Response({'error': 'missing required parameters:[name, text, video_link, audio_link]'},
             status=status.HTTP_400_BAD_REQUEST)
 
-    new_note, note_created = Note.objects.get_or_create(
-        name=body['name'],
-        text=body['text'],
-        video_link=body['video_link'],
-        audio_link=body['audio_link'],
-        user=request.user)
+    # new_note, note_created = Note.objects.get_or_create(
+    #     name=body['name'],
+    #     text=body['text'],
+    #     video_link=body['video_link'],
+    #     audio_link=body['audio_link'],
+    #     user=request.user)
+    tags = None
+    if 'tags' in keys:  
+        tags = body.pop("tags")
+    
+    body['user'] = request.user
+    new_note, note_created = Note.objects.get_or_create(**body)
 
     if note_created:
         new_note.accessed_at = new_note.created_at
@@ -41,17 +45,18 @@ def create_note(request):
     else:
         return Response({'message': 'note exists'}, status=status.HTTP_200_OK)
 
-    for tag_name in body['tags']:
+    if tags:
+        for tag_name in tags:
 
-        tag, created = Tag.objects.get_or_create(
-            name=tag_name, user=request.user)
-        if created:
-            tag.accessed_at = tag.created_at
-        else:
-            tag.accessed_at = datetime.now(timezone.utc)
+            tag, created = Tag.objects.get_or_create(
+                name=tag_name, user=request.user)
+            if created:
+                tag.accessed_at = tag.created_at
+            else:
+                tag.accessed_at = datetime.now(timezone.utc)
 
-        tag.notes.add(new_note)
-        tag.save()
+            tag.notes.add(new_note)
+    
 
     serializer = NoteSerializer(new_note)
 
@@ -124,14 +129,44 @@ def delete_note(request):
 @permission_classes([IsAuthenticated])
 def update_note(request):
     body = request.data
+    delete_tags = []
+    add_tags = []
+    if 'delete_tags' in body.keys():
+        delete_tags = body.pop('delete_tags')
+    if 'add_tags' in body.keys():
+        add_tags = body.pop('add_tags')
     try:
-        current_note = Note.objects.get(
-            name=body['name'], user=request.user)
-        current_note.text = body['text']
-        current_note.video_link = body['video_link']
-        current_note.audio_link = body['audio_link']
-        current_note.save()
-        serializer = NoteSerializer(current_note)
+        body['accessed_at'] = datetime.now(timezone.utc)
+        current_note = Note.objects.filter(name=body['name']).filter(user=request.user)
+        if not current_note.exists():
+            return Response({'message':"note does not exist"},status=status.HTTP_200_OK)
+        
+        #TODO FIX tag removal
+        print(current_note[0].id)
+        tags = Tag.objects.filter(user=request.user,name__in=delete_tags).filter(notes__name=current_note[0].name)
+        output=tags.delete()
+        print(output)
+            
+        # for tag in tags:
+        #     tt = current_note[0]
+        #     ttq = tag.notes.all()
+    
+        for tag_name in add_tags:
+            tag , created = Tag.objects.get_or_create(name=tag_name, user=request.user)
+            
+            if created:
+                tag.accessed_at = tag.created_at
+            else:
+                tag.accessed_at = datetime.now(timezone.utc)
+            
+            tag.notes.add(current_note[0])
+            tag.save()
+
+        current_note.update(**body)
+        
+        serializer = NoteSerializer(current_note[0])
+        note_data = serializer.data
+
         return Response(
             serializer.data,
             status=status.HTTP_200_OK,
