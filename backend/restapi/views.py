@@ -63,7 +63,7 @@ def get_note(request):
     body = request.data
     keys = set(body.keys())
 
-    if not keys.issubset({'name','date'}):
+    if not 'date' in keys and not 'name'in keys:
         return Response({'error':'missing required parameters:[name, date]'},status=status.HTTP_400_BAD_REQUEST)
 
 
