@@ -84,10 +84,9 @@ def get_note(request):
     if not note.exists():
         return Response(status=status.HTTP_404_NOT_FOUND)
 
-    if note.count() > 1:
-        serializer = NoteSerializer(note, many=True)
-    else:
-        serializer = NoteSerializer(note[0])
+    
+    serializer = NoteSerializer(note, many=True)
+  
 
     note.update(accessed_at=datetime.now(timezone.utc))
 
