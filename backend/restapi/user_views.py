@@ -21,18 +21,16 @@ from datetime import datetime, timezone
 def create_new_user(request):
     try:
         body = request.data
-        print(body)
-        user = User.objects.create_user(
-            body['username'],
-            body['email'],
-            body['password'],
-            first_name=body['first_name'],
-            last_name=body['last_name'])
+        user_body = body.copy()
+        body.pop('language')
+        user_body.pop("password")
+        user_body.pop("username")
+        
+        user = User.objects.create_user(body['username'],body['email'],body['password'],first_name=body['first_name'],last_name=body['last_name'])
+        user_profile = UserProfile(user=user,**user_body)
+        user_profile.save()
         token, created = Token.objects.get_or_create(user=user)
         message = {"auth_token": "Token " + token.key}
-
-        user_profile = UserProfile(user=user)
-        user_profile.save()
 
         send_mail("Account created for Multimedia",
                   "Welcome to Multimedia notebook",
@@ -45,7 +43,7 @@ def create_new_user(request):
             status=status.HTTP_201_CREATED,
             content_type='application/json')
     except KeyError:
-        return Response(status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['GET'])
@@ -55,7 +53,7 @@ def create_new_user(request):
 def get_user(request):
     try:
         user_profile = UserProfile.objects.get(user=request.user)
-        serializer = UserSerializer(user_profile)
+        serializer = UserProfileSerializer(user_profile)
         return Response(serializer.data, status=status.HTTP_200_OK)
     except UserProfile.DoesNotExist:
         return Response(status=status.HTTP_400_BAD_REQUEST)
@@ -98,7 +96,7 @@ def update_password(request):
     body = request.data
     keys = set(body.keys())
 
-    if not {'old_password', 'new_password'}.issubset(keys):
+    if not keys.issubset({'old_password', 'new_password'}):
         return Response(
             {
                 'error': 'missing required parameters:[old_password, new_password]'},
@@ -107,7 +105,7 @@ def update_password(request):
         if request.user.check_password(body['old_password']):
             request.user.set_password(body['new_password'])
             request.user.save()
-            new_token = Token.objects.get_or_create(user=request.user)
+            new_token, created = Token.objects.get_or_create(user=request.user)
             message = {"auth_token": "Token " + new_token.key}
             return Response(
                 message,
@@ -116,11 +114,5 @@ def update_password(request):
         else:
             return Response({'error': 'incorrect password'},
                             status=status.HTTP_400_BAD_REQUEST)
-
-    except KeyError:
-        return Response(
-            {
-                'error': 'missing required parameters:[old_password, new_password]'},
-            status=status.HTTP_400_BAD_REQUEST)
     except Exception:
         return Response(status=status.HTTP_400_BAD_REQUEST)

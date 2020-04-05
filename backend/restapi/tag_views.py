@@ -79,32 +79,42 @@ def delete_tag(request):
 
     except current_tag.DoesNotExist:
 
-        message = {"error": "tag not found"}
+        message = {"message": "tag not found"}
         return Response(
             message,
             status=status.HTTP_204_NO_CONTENT,
             content_type='application/json')
 
 
-@api_view(['GET'])
+@api_view(['POST'])
 @renderer_classes([JSONRenderer])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def get_tag(request):
     body = request.data
     try:
-        current_tag = Tag.objects.get(name=body['name'], user=request.user)
-        serializer = TagSerializer(current_tag)
+        current_tag = Tag.objects.filter(name=body['name'], user=request.user)
 
+        if not current_tag.exists():     
+            message = {"error": "tag not found"}
+            return Response(
+                message,
+                status=status.HTTP_204_NO_CONTENT,
+                content_type='application/json')
+
+        current_tag.update(accessed_at=datetime.now(timezone.utc))        
+        tag_data = TagSerializer(current_tag[0]).data
+        notes_data = NoteSerializer(current_tag[0].notes.all(),many=True).data
+        tag_data['notes']=notes_data
+
+    
         return Response(
-            serializer.data,
+            tag_data,
             status=status.HTTP_200_OK,
             content_type='application/json')
 
-    except current_tag.DoesNotExist:
-
-        message = {"error": "tag not found"}
+    except KeyError:
         return Response(
-            message,
-            status=status.HTTP_204_NO_CONTENT,
+            {"error":"'name' parameter missing"},
+            status=status.HTTP_400_BAD_REQUEST,
             content_type='application/json')

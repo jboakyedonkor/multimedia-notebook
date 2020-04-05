@@ -26,12 +26,6 @@ def create_note(request):
         return Response({'error': 'missing required parameters:[name, text, video_link, audio_link]'},
             status=status.HTTP_400_BAD_REQUEST)
 
-    # new_note, note_created = Note.objects.get_or_create(
-    #     name=body['name'],
-    #     text=body['text'],
-    #     video_link=body['video_link'],
-    #     audio_link=body['audio_link'],
-    #     user=request.user)
     tags = None
     if 'tags' in keys:  
         tags = body.pop("tags")
@@ -66,7 +60,7 @@ def create_note(request):
         content_type='application/json')
 
 
-@api_view(['GET'])
+@api_view(['POST'])
 @renderer_classes([JSONRenderer])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
@@ -76,7 +70,7 @@ def get_note(request):
 
     if not keys.issubset({'name', 'date'}):
         return Response(
-            {'error': 'missing required parameters:[name, date]'}, status=status.HTTP_400_BAD_REQUEST)
+            {'error': 'missing required parameters:[name, date] or included extra parameters'}, status=status.HTTP_400_BAD_REQUEST)
 
     note = Note.objects.filter(user=request.user)
     if 'name' in keys:
@@ -85,7 +79,7 @@ def get_note(request):
 
     if 'date' in keys:
         oldest_time = datetime.strptime(body['date'], '%Y-%m-%dT%H:%M:%S.%fZ')
-        note = note.filter(accessed_at_lte=oldest_time).order_by('-created_at')
+        note = note.filter(accessed_at__lte=oldest_time).order_by('-created_at')
 
     if not note.exists():
         return Response(status=status.HTTP_404_NOT_FOUND)
@@ -107,23 +101,25 @@ def get_note(request):
 def delete_note(request):
     body = request.data
     try:
-        current_note = Note.objects.get(
-            name=body['name'], user=request.user)
+        if type(body['name']) is list:
+            current_note = Note.objects.filter( name__in=body['name'], user=request.user)
+        else:
+            current_note = Note.objects.filter( name=body['name'], user=request.user)
         current_note.delete()
         message = {'message': 'note deleted'}
         return Response(
             message,
             status=status.HTTP_200_OK,
             content_type='application/json')
-    except Note.DoesNotExist:
-        message = {"error": "note not found"}
+    except KeyError:
+        message = {"error": " 'name' parameter not included"}
         return Response(
             message,
-            status=status.HTTP_204_NO_CONTENT,
+            status=status.HTTP_400_BAD_REQUEST,
             content_type='application/json')
 
 
-@api_view(['PUT'])
+@api_view(['POST'])
 @renderer_classes([JSONRenderer])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
@@ -143,29 +139,21 @@ def update_note(request):
         
         #TODO FIX tag removal
         print(current_note[0].id)
-        tags = Tag.objects.filter(user=request.user,name__in=delete_tags).filter(notes__name=current_note[0].name)
-        output=tags.delete()
-        print(output)
-            
-        # for tag in tags:
-        #     tt = current_note[0]
-        #     ttq = tag.notes.all()
+        tags = Tag.objects.filter(user=request.user,name__in=delete_tags,notes=current_note[0])
+        for tag in tags:
+            tag.notes.remove(current_note[0])
+
     
         for tag_name in add_tags:
-            tag , created = Tag.objects.get_or_create(name=tag_name, user=request.user)
-            
+            tag , created = Tag.objects.get_or_create(name=tag_name, user=request.user)    
             if created:
                 tag.accessed_at = tag.created_at
             else:
                 tag.accessed_at = datetime.now(timezone.utc)
-            
             tag.notes.add(current_note[0])
-            tag.save()
-
-        current_note.update(**body)
         
+        current_note.update(**body)
         serializer = NoteSerializer(current_note[0])
-        note_data = serializer.data
 
         return Response(
             serializer.data,
