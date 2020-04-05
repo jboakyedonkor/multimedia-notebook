@@ -36,7 +36,7 @@ def create_tag(request):
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
-@api_view(['PUT'])
+@api_view(['POST'])
 @renderer_classes([JSONRenderer])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
