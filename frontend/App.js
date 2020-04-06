@@ -10,6 +10,7 @@ import MainAppNavigator from './navigation/MainAppNavigator';
 
 import authReducer from './store/reducers/auth';
 import notesReducer from './store/reducers/notes';
+import userReducer from './store/reducers/user';
 
 enableScreens();
 
@@ -17,7 +18,8 @@ const middlewares = [ReduxThunk]
 
 const rootReducer = combineReducers({
   auth: authReducer,
-  notes: notesReducer
+  notes: notesReducer,
+  user: userReducer
 })
 
 //create the redux store

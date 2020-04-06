@@ -6,6 +6,7 @@ import { useDispatch } from 'react-redux';
 import Input from '../components/Input';
 import CustomButton from '../components/CustomButton';
 import * as authActions from '../store/actions/auth';
+import { ScrollView } from 'react-native-gesture-handler';
 
 
 const LoginScreen = props => {
@@ -39,36 +40,38 @@ const LoginScreen = props => {
     //console.log(email);
     //console.log(password);
     return (
-        <View style={styles.screen}>
-            <View style={styles.textContainer}>
-                <Text style={styles.text}>Log in or sign up for free!</Text>
+        <ScrollView>
+            <View style={styles.screen}>
+                <View style={styles.textContainer}>
+                    <Text style={styles.text}>Log in or sign up for free!</Text>
+                </View>
+                <View>
+                    <Input
+                        placeholder={'Username'}
+                        style={styles.input}
+                        value={username}
+                        onChangeText={text => setUsername(text)}
+                    />
+                    <Input
+                        placeholder={'Password'}
+                        style={styles.input}
+                        textContentType={'password'}
+                        secureTextEntry={true}
+                        value={password}
+                        onChangeText={text => setPassword(text)}
+                    />
+                    {isLoading ? (
+                        <ActivityIndicator size='small' color={'#DA4633'} />
+                    ) : (
+                            <CustomButton
+                                style={{ backgroundColor: '#DA4633' }}
+                                title={'Sign In'}
+                                color={'black'}
+                                onPress={LoginHandler}
+                            />)}
+                </View>
             </View>
-            <View>
-                <Input
-                    placeholder={'Username'}
-                    style={styles.input}
-                    value={username}
-                    onChangeText={text => setUsername(text)}
-                />
-                <Input
-                    placeholder={'Password'}
-                    style={styles.input}
-                    textContentType={'password'}
-                    secureTextEntry={true}
-                    value={password}
-                    onChangeText={text => setPassword(text)}
-                />
-                {isLoading ? (
-                    <ActivityIndicator size='small' color={'#DA4633'} />
-                ) : (
-                        <CustomButton
-                            style={{ backgroundColor: '#DA4633' }}
-                            title={'Sign In'}
-                            color={'black'}
-                            onPress={LoginHandler}
-                        />)}
-            </View>
-        </View>
+        </ScrollView>
     )
 }
 

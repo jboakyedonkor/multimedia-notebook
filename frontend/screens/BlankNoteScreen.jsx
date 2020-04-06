@@ -1,16 +1,35 @@
-import React, { useState, useEffect } from 'react';
-import { View, TextInput, StyleSheet, Dimensions, ScrollView, Platform, Alert } from 'react-native';
+import React, { useState, useCallback, useEffect } from 'react';
+import {
+    View,
+    TextInput,
+    StyleSheet,
+    Dimensions,
+    ScrollView,
+    Platform,
+    Alert,
+    ActivityIndicator
+} from 'react-native';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
+import { useDispatch } from 'react-redux';
+
+
 
 import HeaderButton from '../components/HeaderButton';
+import * as notesActions from '../store/actions/notes';
+import NewNoteOverlayDisplay from '../components/NewNoteOverlayDisplay';
 
 
 const BlankNoteScreen = props => {
+
+    const dispatch = useDispatch();
 
     const [title, setTitle] = useState("")
     const [body, setBody] = useState("")
     const [titleIsInvalid, setTitleIsInvalid] = useState(true)
     const [bodyIsInvalid, setBodyIsInvalid] = useState(true)
+    const [modalIsVisible, setModalIsVisible] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState();
 
     titleChangeHandler = (text) => {
         setTitle(text)
@@ -29,24 +48,47 @@ const BlankNoteScreen = props => {
         }
     }
 
-    submitHandler = () => {
+    displayOptionModal = () => {
+        setModalIsVisible(true);
+    }
+
+    submitHandler = useCallback(async () => {
         if (titleIsInvalid || bodyIsInvalid) {
             Alert.alert('Empty input!', 'Please enter text in the form.', [
                 { text: 'Okay' }
             ]);
             return;
         }
+        setError(null);
+        setIsLoading(true);
 
-        //setError here
-        //setIsLoading(true);
-        console.log("Form was valid")
-        
-    }
+        try {
+            await dispatch(notesActions.createNote(
+                title,
+                body,
+                "https://www.googleapis.com/youtube/v3",
+                "https://www.googleapis.com/youtube/v3"
+            )
+            );
+            props.navigation.goBack();
+        } catch (err) {
+            console.log(err.message)
+            setError(err.message);
+        }
+        setIsLoading(false);
+    }, [dispatch, titleIsInvalid, bodyIsInvalid, title, body]);
 
     useEffect(() => {
         props.navigation.setOptions({
             headerRight: () => (
                 <HeaderButtons HeaderButtonComponent={HeaderButton}>
+                    <Item
+                        title="Info"
+                        iconName={
+                            Platform.OS === 'android' ? 'ios-more' : 'ios-more'
+                        }
+                        onPress={displayOptionModal}
+                    />
                     <Item
                         title="Save"
                         iconName={
@@ -59,8 +101,22 @@ const BlankNoteScreen = props => {
         });
     }, [submitHandler]);
 
+
+    //spinner display during network request
+    if (isLoading) {
+        return (
+            <View style={styles.centered}>
+                <ActivityIndicator size="large" color={'#DA4633'} />
+            </View>
+        );
+    }
+
     return (
         <View style={styles.screen}>
+            <NewNoteOverlayDisplay
+                isVisible={modalIsVisible}
+                removeModal={() => setModalIsVisible(false)}
+            />
             <ScrollView
                 style={styles.scrollview}
             >
@@ -106,13 +162,16 @@ const styles = new StyleSheet.create({
     scrollview: {
         height: '100%',
         width: '100%',
-
+    },
+    centered: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center'
     },
 
     blankNoteContainer: {
         width: '100%',
         height: '100%',
-
     },
     title: {
         fontSize: 20,

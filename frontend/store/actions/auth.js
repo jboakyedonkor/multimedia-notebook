@@ -4,7 +4,7 @@ import { AsyncStorage } from 'react-native';
 export const AUTHENTICATE = 'AUTHENTICATE';
 export const LOGOUT = 'LOGOUT';
 export const SET_DID_TRY_AL = 'SET_DID_TRY_AL';
-export const BASE_URL = '10.140.23.82';
+export const BASE_URL = 'mn-api-ajvco6nb4a-uk.a.run.app';
 
 
 export const setDidTryAL = () => {
@@ -23,10 +23,10 @@ export const authenticate = (userId, token) => {
 export const signup = (userSignupInfomation) => {
 
     const { username, password, email, firstname, lastname } = userSignupInfomation;
-
+    console.log("here in sign up")
     return async dispatch => {
         const response = await fetch(
-            `http://${BASE_URL}:8000/api/create-user`,
+            `https://${BASE_URL}/api/create-user`,
             {
                 method: 'POST',
                 headers: {
@@ -38,13 +38,15 @@ export const signup = (userSignupInfomation) => {
                     password: password,
                     email: email,
                     first_name: firstname,
-                    last_name: lastname
+                    last_name: lastname,
+                    language: 'English'
                 }),
             })
         //.catch(error => console.log(error))
 
         //handle server error
         if (!response.ok) {
+            console.log("response not okay")
             const errorResData = await response.json();
             throw new Error('Something went wrong!');
 
@@ -79,7 +81,7 @@ export const login = userLoginInformation => {
     const { username, password } = userLoginInformation;
     return async dispatch => {
         const response = await fetch(
-            `http://${BASE_URL}:8000/api/api-token-auth/`,
+            `https://${BASE_URL}/api/api-token-auth/`,
             {
                 method: 'POST',
                 headers: {
