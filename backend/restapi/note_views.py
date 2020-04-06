@@ -75,7 +75,7 @@ def get_note(request):
     note = Note.objects.filter(user=request.user)
     if 'name' in keys:
         note = note.filter(
-            name__contains=body['name']).order_by('-accessed_at')
+            name__icontains=body['name']).order_by('-accessed_at')
 
     if 'date' in keys:
         oldest_time = datetime.strptime(body['date'], '%Y-%m-%dT%H:%M:%S.%fZ')
