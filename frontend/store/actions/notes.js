@@ -9,8 +9,14 @@ export const BASE_URL = 'mn-api-ajvco6nb4a-uk.a.run.app';
 
 
 export const searchNotes = (name) => {
-
   return async (dispatch, getState) => {
+
+    //searchField is empty, dont make request, but set store value to []
+    if (name.trim().length == 0) {
+      dispatch({ type: SET_NOTES, searchedNotes: [] });
+      return;
+    }
+
     const token = getState().auth.token;
     console.log("HERE AT ACTION: " + token)
     try {
@@ -34,11 +40,11 @@ export const searchNotes = (name) => {
       }
 
       const resData = await response.json()
-      console.log(resData)
+      //console.log(resData)
 
       const loadedNotes = [];
-      
-      for (const key in resData){
+
+      for (const key in resData) {
 
         //console.log(resData[key])
         loadedNotes.push(
@@ -51,14 +57,11 @@ export const searchNotes = (name) => {
             resData[key].accessed_at
           )
         );
-    }
+      }
 
-    if(name.trim().length == 0){
-      dispatch({type: SET_NOTES, searchedNotes: []});
-    } else{
-      dispatch({type: SET_NOTES, searchedNotes: loadedNotes});
-    }
-      
+      dispatch({ type: SET_NOTES, searchedNotes: loadedNotes });
+
+
 
     } catch (err) {
       console.log("server not okay")
@@ -97,18 +100,76 @@ export const createNote = (name, text, video_link, audio_link, tags = []) => {
 
     //print response from API
     console.log(resData)
-/*
-    dispatch({
-      type: CREATE_NOTE,
-      noteData: {
-        name: resData.name,
-        text: resData.text,
-        video_link: resData.video_link,
-        audio_link: resData.audio_link,
-        created_at: resData.created_at,
-        accessed_at: resData.accessed_at
-      }
-    });
-    */
+    /*
+        dispatch({
+          type: CREATE_NOTE,
+          noteData: {
+            name: resData.name,
+            text: resData.text,
+            video_link: resData.video_link,
+            audio_link: resData.audio_link,
+            created_at: resData.created_at,
+            accessed_at: resData.accessed_at
+          }
+        });
+        */
   };
 };
+
+
+export const deleteNote = (name) => {
+
+  return async (dispatch, getState) => {
+
+    const token = getState().auth.token;
+  
+    try {
+      const response = await fetch(
+        `https://${BASE_URL}/api/delete-note`,
+        {
+          method: 'DELETE',
+          headers: {
+            'Authorization': token,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            name
+          })
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error('Could not find notes. Something wrong with the server!');
+      }
+
+      const resData = await response.json()
+      console.log(resData)
+/*
+      const loadedNotes = [];
+
+      for (const key in resData) {
+
+        //console.log(resData[key])
+        loadedNotes.push(
+          new Note(
+            resData[key].name,
+            resData[key].text,
+            resData[key].video_link,
+            resData[key].audio_link,
+            resData[key].created_at,
+            resData[key].accessed_at
+          )
+        );
+      }
+
+      dispatch({ type: SET_NOTES, searchedNotes: loadedNotes });
+
+
+*/
+    } catch (err) {
+      console.log("server not okay")
+      throw new Error(err.message);
+    }
+
+  };
+}

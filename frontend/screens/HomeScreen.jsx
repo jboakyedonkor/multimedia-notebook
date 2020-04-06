@@ -3,12 +3,15 @@ import { View, Text, StyleSheet, Button, Image, Dimensions } from 'react-native'
 
 
 import CustomButton from '../components/CustomButton';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { ScrollView } from 'react-native-gesture-handler';
 
 const HomeScreen = props => {
 
 
     return (
-        <View style={styles.screen}>
+
+        <SafeAreaView style={styles.screen}>
             <View style={styles.headerContainer}>
                 <Text style={styles.headerText}>MULTI MEDIA NOTES</Text>
             </View>
@@ -48,7 +51,8 @@ const HomeScreen = props => {
                     }}
                 />
             </View>
-        </View>
+        </SafeAreaView>
+
     )
 }
 
@@ -62,6 +66,7 @@ const styles = StyleSheet.create({
         width: '100%',
         height: '100%',
 
+
         //maxWidth: Dimensions.get('window').width,
         //maxHeight: Dimensions.get('window').height
         //borderColor: 'black',
@@ -72,7 +77,7 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-end',
         alignItems: 'center',
         width: '100%',
-        height: '15%'
+        height: '15%',
     },
     headerText: {
         marginTop: 60,

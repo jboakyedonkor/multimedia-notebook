@@ -1,10 +1,14 @@
 import React, { useState } from 'react';
-import { SafeAreaView, Text, StyleSheet, ScrollView, FlatList } from 'react-native';
+import { SafeAreaView, View, Text, StyleSheet, ScrollView, FlatList } from 'react-native';
 import { SearchBar, ListItem } from 'react-native-elements';
 import { useDispatch, useSelector } from 'react-redux';
 
 
+import { SwipeListView } from 'react-native-swipe-list-view';
+
 import * as notesActions from '../store/actions/notes';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+
 
 
 const SearchScreen = props => {
@@ -32,35 +36,76 @@ const SearchScreen = props => {
 
     }
 
+    const deleteNote = async (noteTobeDeleted) => {
+        
+        try {
+            await dispatch(notesActions.deleteNote(noteTobeDeleted))
+            fetchNotes("")
+
+
+        } catch (err) {
+            console.log(err.message)
+            setError(err.message)
+
+        }
+    }
+
+    const renderHiddenItem = (itemData, itemMap) => (
+
+        <View style={styles.rowBack}>
+            <View style={[styles.backRightBtn, styles.backRightBtnRight]}>
+                <Text
+                    style={styles.backTextWhite}
+                    onPress={() => deleteNote(itemData.item.name)}
+                >
+                    Delete</Text>
+            </View>
+        </View>
+
+    )
+
 
     return (
 
         <SafeAreaView style={styles.screen}>
-                <SearchBar
-                    platform={Platform.OS === 'android' ? 'android' : 'ios'}
-                    placeholder="Enter title of note"
-                    onChangeText={updateSearchField}
-                    value={searchText}
-                    lightTheme
-                    round
-                    placeholderTextColor='black'
-                />
-                <FlatList
-                    data={searchedNotes}
-                    keyExtractor={(item, index) => index.toString()}
-                    renderItem={({item}) => (
-                        //console.log(searchedNotes)
-                        //<Text>{item.name}</Text>
-                        
-                        <ListItem
-                        title = {item.name}
-                        subtitle = {item.text}
+            <SearchBar
+                platform={Platform.OS === 'android' ? 'android' : 'ios'}
+                placeholder="Enter title of note"
+                onChangeText={updateSearchField}
+                value={searchText}
+                lightTheme
+                round
+                placeholderTextColor='black'
+            />
+            <SwipeListView
+                data={searchedNotes}
+                keyExtractor={(item, index) => index.toString()}
+                renderItem={({ item }) => (
+                    //console.log(searchedNotes)
+                    //<Text>{item.name}</Text>
+
+                    <ListItem
+                        title={item.name}
+                        subtitle={item.text}
                         bottomDivider
                         chevron
-                        />
-                        
-                    )}
-                />
+                    />
+
+                )}
+                renderHiddenItem={renderHiddenItem}
+                leftOpenValue={75}
+                rightOpenValue={0}
+            /*
+            onRowOpen = {(itemKey, itemMap) => {
+                console.log("--------------------------------------------------------------")
+                console.log(itemMap)
+                setTimeout(() => {
+                    itemMap[itemKey].closeRow()
+                }, 3000)
+            }}
+            */
+
+            />
         </SafeAreaView>
     )
 }
@@ -75,7 +120,30 @@ const styles = StyleSheet.create({
     scrollView: {
         flex: 1,
         borderWidth: 1
-    }
+    },
+    rowBack: {
+        alignItems: 'center',
+        backgroundColor: 'red',
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        paddingLeft: 15,
+    },
+    backRightBtn: {
+        alignItems: 'center',
+        bottom: 0,
+        justifyContent: 'center',
+        position: 'absolute',
+        top: 0,
+        width: 75,
+    },
+    backRightBtnRight: {
+        backgroundColor: 'red',
+        left: 0,
+    },
+    backTextWhite: {
+        color: '#FFF',
+    },
 })
 
 export default SearchScreen;
