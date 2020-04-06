@@ -37,7 +37,20 @@ export const LandingPageNavigator = () => {
             />
         </LandingPageStackNavigator.Navigator>
     )
+}
+const UserDashboardStackNavigator = createStackNavigator();
+export const UserDashboardNavigator = () => {
 
+    return(
+        <UserDashboardStackNavigator.Navigator>
+            <UserDashboardStackNavigator.Screen
+                name = 'Dashboard'
+                component = {UserDashboardScreen}
+                options = {{headerTitle: ''}}
+            />
+
+        </UserDashboardStackNavigator.Navigator>
+    )
 }
 
 const LoggedInTabNavigator = createBottomTabNavigator();
@@ -79,8 +92,8 @@ const LoggedInNavigator = () => {
                 }}
             />
             <LoggedInTabNavigator.Screen
-                name='UserDashboard'
-                component={UserDashboardScreen}
+                name='UserDashboardPage'
+                component={UserDashboardNavigator}
                 options={{
                     tabBarLabel: 'Me',
                     tabBarIcon: ({ color, size }) => {
@@ -115,7 +128,8 @@ const AuthNavigator = () => {
                 name='SignUp'
                 component={SignUpScreen}
                 options={{
-                    headerShown: false
+                    headerShown: true,
+                    headerTitle: 'New Account'
                 }}
             />
             <AuthStackNavigator.Screen

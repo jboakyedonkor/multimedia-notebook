@@ -1,12 +1,14 @@
 class Note {
 
-    constructor (id, name, text, video_link, audio_link){
+    constructor (name, text, video_link, audio_link, created_at = '', accessed_at = '' ){
 
-        this.id = id;
+    
         this.name = name;
         this.text = text;
         this.video_link = video_link;
         this.audio_link = audio_link;
+        this.created_at = created_at;
+        this.accessed_at = accessed_at;
     }
 }
 
