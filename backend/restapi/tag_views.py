@@ -93,30 +93,35 @@ def delete_tag(request):
 def get_tag(request):
     body = request.data
     keys = set(body.keys())
-    
+
     if 'date' in keys:
         oldest_time = datetime.strptime(body['date'], '%Y-%m-%dT%H:%M:%S.%fZ')
-        current_tag = Tag.objects.filter(accessed_at__lte=oldest_time, user=request.user).order_by('-accessed_at')
-       
+        current_tag = Tag.objects.filter(
+            accessed_at__lte=oldest_time,
+            user=request.user).order_by('-accessed_at')
+
         response_data = TagSerializer(current_tag, many=True).data
         current_tag.update(accessed_at=datetime.now(timezone.utc))
     elif 'name' in keys:
         current_tag = Tag.objects.filter(name=body['name'], user=request.user)
-        if not current_tag.exists():     
+        if not current_tag.exists():
             message = {"error": "tag not found"}
             return Response(
                 message,
                 status=status.HTTP_204_NO_CONTENT,
                 content_type='application/json')
 
-        current_tag.update(accessed_at=datetime.now(timezone.utc))        
+        current_tag.update(accessed_at=datetime.now(timezone.utc))
         tag_data = TagSerializer(current_tag[0]).data
         response_data = tag_data.copy()
-        notes_data = NoteSerializer(current_tag[0].notes.all(),many=True).data
-        response_data['notes']=notes_data
+        notes_data = NoteSerializer(current_tag[0].notes.all(), many=True).data
+        response_data['notes'] = notes_data
     else:
-        return Response({"error":"'name' parameter missing"}, status=status.HTTP_400_BAD_REQUEST,content_type='application/json')
+        return Response({"error": "'name' parameter missing"},
+                        status=status.HTTP_400_BAD_REQUEST,
+                        content_type='application/json')
 
-    return Response(response_data,status=status.HTTP_200_OK,content_type='application/json')
-
-  
+    return Response(
+        response_data,
+        status=status.HTTP_200_OK,
+        content_type='application/json')

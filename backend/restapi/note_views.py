@@ -23,13 +23,15 @@ def create_note(request):
     keys = set(body.keys())
 
     if not {'name', 'text', 'video_link', 'audio_link'}.issubset(keys):
-        return Response({'error': 'missing required parameters:[name, text, video_link, audio_link]'},
+        return Response(
+            {
+                'error': 'missing required parameters:[name, text, video_link, audio_link]'},
             status=status.HTTP_400_BAD_REQUEST)
 
     tags = None
-    if 'tags' in keys:  
+    if 'tags' in keys:
         tags = body.pop("tags")
-    
+
     body['user'] = request.user
     new_note, note_created = Note.objects.get_or_create(**body)
 
@@ -50,7 +52,6 @@ def create_note(request):
                 tag.accessed_at = datetime.now(timezone.utc)
 
             tag.notes.add(new_note)
-    
 
     serializer = NoteSerializer(new_note)
 
@@ -70,7 +71,9 @@ def get_note(request):
 
     if not keys.issubset({'name', 'date'}):
         return Response(
-            {'error': 'missing required parameters:[name, date] or included extra parameters'}, status=status.HTTP_400_BAD_REQUEST)
+            {
+                'error': 'missing required parameters:[name, date] or included extra parameters'},
+            status=status.HTTP_400_BAD_REQUEST)
 
     note = Note.objects.filter(user=request.user)
     if 'name' in keys:
@@ -79,14 +82,13 @@ def get_note(request):
 
     if 'date' in keys:
         oldest_time = datetime.strptime(body['date'], '%Y-%m-%dT%H:%M:%S.%fZ')
-        note = note.filter(accessed_at__lte=oldest_time).order_by('-created_at')
+        note = note.filter(
+            accessed_at__lte=oldest_time).order_by('-created_at')
 
     if not note.exists():
         return Response(status=status.HTTP_404_NOT_FOUND)
 
-    
     serializer = NoteSerializer(note, many=True)
-  
 
     note.update(accessed_at=datetime.now(timezone.utc))
 
@@ -100,10 +102,12 @@ def get_note(request):
 def delete_note(request):
     body = request.data
     try:
-        if type(body['name']) is list:
-            current_note = Note.objects.filter( name__in=body['name'], user=request.user)
+        if isinstance(body['name'], list):
+            current_note = Note.objects.filter(
+                name__in=body['name'], user=request.user)
         else:
-            current_note = Note.objects.filter( name=body['name'], user=request.user)
+            current_note = Note.objects.filter(
+                name=body['name'], user=request.user)
         current_note.delete()
         message = {'message': 'note deleted'}
         return Response(
@@ -132,25 +136,31 @@ def update_note(request):
         add_tags = body.pop('add_tags')
     try:
         body['accessed_at'] = datetime.now(timezone.utc)
-        current_note = Note.objects.filter(name=body['name']).filter(user=request.user)
+        current_note = Note.objects.filter(
+            name=body['name']).filter(
+            user=request.user)
         if not current_note.exists():
-            return Response({'message':"note does not exist"},status=status.HTTP_200_OK)
-        
-        #TODO FIX tag removal
+            return Response({'message': "note does not exist"},
+                            status=status.HTTP_200_OK)
+
+        # TODO FIX tag removal
         print(current_note[0].id)
-        tags = Tag.objects.filter(user=request.user,name__in=delete_tags,notes=current_note[0])
+        tags = Tag.objects.filter(
+            user=request.user,
+            name__in=delete_tags,
+            notes=current_note[0])
         for tag in tags:
             tag.notes.remove(current_note[0])
 
-    
         for tag_name in add_tags:
-            tag , created = Tag.objects.get_or_create(name=tag_name, user=request.user)    
+            tag, created = Tag.objects.get_or_create(
+                name=tag_name, user=request.user)
             if created:
                 tag.accessed_at = tag.created_at
             else:
                 tag.accessed_at = datetime.now(timezone.utc)
             tag.notes.add(current_note[0])
-        
+
         current_note.update(**body)
         serializer = NoteSerializer(current_note[0])
 

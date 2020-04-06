@@ -25,9 +25,14 @@ def create_new_user(request):
         body.pop('language')
         user_body.pop("password")
         user_body.pop("username")
-        
-        user = User.objects.create_user(body['username'],body['email'],body['password'],first_name=body['first_name'],last_name=body['last_name'])
-        user_profile = UserProfile(user=user,**user_body)
+
+        user = User.objects.create_user(
+            body['username'],
+            body['email'],
+            body['password'],
+            first_name=body['first_name'],
+            last_name=body['last_name'])
+        user_profile = UserProfile(user=user, **user_body)
         user_profile.save()
         token, created = Token.objects.get_or_create(user=user)
         message = {"auth_token": "Token " + token.key}
