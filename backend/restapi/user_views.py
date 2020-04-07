@@ -37,7 +37,7 @@ def create_new_user(request):
         token, created = Token.objects.get_or_create(user=user)
         message = {"auth_token": "Token " + token.key}
 
-        email_message = "Hi {},\n\nWelcome to Multimedia notebook!\U0001f600\U0001f600\U0001f600\nHope we can help your with language learning needs.\nYour username is :{}\n\nBest,\n\nMultimedia Notebook\n".format(
+        email_message = "Hi {},\n\nWelcome to Multimedia notebook!\U0001f600\U0001f600\U0001f600\nHope we can help you with your language learning needs.\nYour username is :{}\n\nBest,\nMultimedia Notebook\n".format(
             body['first_name'], body['username'])
 
         send_mail("Account created for Multimedia",
