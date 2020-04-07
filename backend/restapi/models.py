@@ -11,6 +11,7 @@ class Note(models.Model):
     video_link = models.TextField(null=True)
     audio_link = models.TextField(null=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    favorite = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     accessed_at = models.DateTimeField(null=True, blank=True)
 
@@ -22,6 +23,8 @@ class Tag(models.Model):
     name = models.CharField(max_length=15, unique=True)
     created_at = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    popularity = models.PositiveIntegerField(default=0)
+    favorite = models.BooleanField(default=False)
     notes = models.ManyToManyField(Note)
     accessed_at = models.DateTimeField(null=True, blank=True)
 
