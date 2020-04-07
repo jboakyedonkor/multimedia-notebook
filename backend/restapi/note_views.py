@@ -69,13 +69,18 @@ def get_note(request):
     body = request.data
     keys = set(body.keys())
 
-    if not keys.issubset({'name', 'date'}):
+    if not keys.issubset({'name', 'date', 'favorite'}):
         return Response(
             {
                 'error': 'missing required parameters:[name, date] or included extra parameters'},
             status=status.HTTP_400_BAD_REQUEST)
 
     note = Note.objects.filter(user=request.user)
+
+    if 'favorite' in keys and body['favorite']:
+        keys -= {'name', 'date'}
+        note = note.filter(favorite=body['favorite']).order_by('-accessed_at')
+
     if 'name' in keys:
         note = note.filter(
             name__icontains=body['name']).order_by('-accessed_at')
@@ -143,8 +148,6 @@ def update_note(request):
             return Response({'message': "note does not exist"},
                             status=status.HTTP_200_OK)
 
-        # TODO FIX tag removal
-        print(current_note[0].id)
         tags = Tag.objects.filter(
             user=request.user,
             name__in=delete_tags,
