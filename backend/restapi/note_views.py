@@ -69,7 +69,7 @@ def get_note(request):
     body = request.data
     keys = set(body.keys())
 
-    if not keys.issubset({'name', 'date'}):
+    if not keys.issubset({'name', 'date','favorite'}):
         return Response(
             {
                 'error': 'missing required parameters:[name, date] or included extra parameters'},
