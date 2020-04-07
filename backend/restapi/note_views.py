@@ -69,7 +69,7 @@ def get_note(request):
     body = request.data
     keys = set(body.keys())
 
-    if not keys.issubset({'name', 'date','favorite'}):
+    if not keys.issubset({'name', 'date', 'favorite'}):
         return Response(
             {
                 'error': 'missing required parameters:[name, date] or included extra parameters'},
@@ -78,7 +78,7 @@ def get_note(request):
     note = Note.objects.filter(user=request.user)
 
     if 'favorite' in keys and body['favorite']:
-        keys -= {'name','date'}
+        keys -= {'name', 'date'}
         note = note.filter(favorite=body['favorite']).order_by('-accessed_at')
 
     if 'name' in keys:

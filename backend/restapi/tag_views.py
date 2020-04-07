@@ -44,7 +44,7 @@ def create_tag(request):
 def update_tag(request):
     body = request.data
     try:
-        keys =set(body.keys())
+        keys = set(body.keys())
         if 'current_name' in keys and 'new_name' in keys:
             current_name = body.pop('current_name')
             body['name'] = body.pop('new_name')
@@ -53,9 +53,9 @@ def update_tag(request):
 
         body['accessed_at'] = datetime.now(timezone.utc)
         Tag.objects.filter(name=current_name, user=request.user).update(**body)
-        new_tag =Tag.objects.filter(name=body['name'],user=request.user)
-        
-        response_data = TagSerializer(new_tag,many=True).data
+        new_tag = Tag.objects.filter(name=body['name'], user=request.user)
+
+        response_data = TagSerializer(new_tag, many=True).data
         return Response(
             response_data,
             status=status.HTTP_200_OK,
@@ -106,24 +106,30 @@ def get_tag(request):
 
     if 'date' in keys:
         oldest_time = datetime.strptime(body['date'], '%Y-%m-%dT%H:%M:%S.%fZ')
-        current_tag = current_tag.filter(accessed_at__lte=oldest_time).order_by('-accessed_at')
+        current_tag = current_tag.filter(
+            accessed_at__lte=oldest_time).order_by('-accessed_at')
 
         response_data = TagSerializer(current_tag, many=True).data.copy()
-        current_tag.update(popularity=F('popularity')+1,accessed_at=datetime.now(timezone.utc))
+        current_tag.update(
+            popularity=F('popularity') + 1,
+            accessed_at=datetime.now(
+                timezone.utc))
 
     elif 'popularity' in keys and body['popularity']:
-        
-        current_tag = current_tag.filter(user=request.user).order_by('popularity')
-        response_data = TagSerializer(current_tag,many=True).data.copy()
-        if len(response_data) >=10:
-            response_data =response_data[:10]
-        current_tag.update(popularity=F('popularity')+1)
-    
+
+        current_tag = current_tag.filter(
+            user=request.user).order_by('popularity')
+        response_data = TagSerializer(current_tag, many=True).data.copy()
+        if len(response_data) >= 10:
+            response_data = response_data[:10]
+        current_tag.update(popularity=F('popularity') + 1)
+
     elif 'favorite' in keys and body['favorite']:
-        current_tag = current_tag.filter(favorite=body['favorite']).order_by('-accessed_at')
-        response_data = TagSerializer(current_tag,many=True).data.copy()
+        current_tag = current_tag.filter(
+            favorite=body['favorite']).order_by('-accessed_at')
+        response_data = TagSerializer(current_tag, many=True).data.copy()
         current_tag.update(accessed_at=datetime.now(timezone.utc))
-    
+
     elif 'name' in keys:
         current_tag = current_tag.filter(name=body['name'], user=request.user)
         if not current_tag.exists():
@@ -133,7 +139,10 @@ def get_tag(request):
                 status=status.HTTP_204_NO_CONTENT,
                 content_type='application/json')
 
-        current_tag.update(popularity=F('popularity')+1,accessed_at=datetime.now(timezone.utc))
+        current_tag.update(
+            popularity=F('popularity') + 1,
+            accessed_at=datetime.now(
+                timezone.utc))
         tag_data = TagSerializer(current_tag[0]).data
         response_data = tag_data.copy()
         notes_data = NoteSerializer(current_tag[0].notes.all(), many=True).data

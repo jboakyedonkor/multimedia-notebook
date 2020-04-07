@@ -21,7 +21,12 @@ class TagSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Tag
-        fields = ['name', 'favorite','popularity','created_at','accessed_at']
+        fields = [
+            'name',
+            'favorite',
+            'popularity',
+            'created_at',
+            'accessed_at']
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
