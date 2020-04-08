@@ -54,7 +54,8 @@ export const searchNotes = (name) => {
             resData[key].video_link,
             resData[key].audio_link,
             resData[key].created_at,
-            resData[key].accessed_at
+            resData[key].accessed_at,
+            resData[key].favorite
           )
         );
       }
@@ -144,28 +145,12 @@ export const deleteNote = (name) => {
 
       const resData = await response.json()
       console.log(resData)
-/*
-      const loadedNotes = [];
-
-      for (const key in resData) {
-
-        //console.log(resData[key])
-        loadedNotes.push(
-          new Note(
-            resData[key].name,
-            resData[key].text,
-            resData[key].video_link,
-            resData[key].audio_link,
-            resData[key].created_at,
-            resData[key].accessed_at
-          )
-        );
-      }
-
-      dispatch({ type: SET_NOTES, searchedNotes: loadedNotes });
 
 
-*/
+      dispatch({ type: DELETE_NOTE, name });
+
+
+
     } catch (err) {
       console.log("server not okay")
       throw new Error(err.message);
@@ -173,3 +158,54 @@ export const deleteNote = (name) => {
 
   };
 }
+
+
+export const updateNote = (name, text, video_link, audio_link, favorite) => {
+  return async (dispatch, getState) => {
+    // any async code you want!
+    const token = getState().auth.token;
+
+    try{
+    const response = await fetch(
+      `https://${BASE_URL}/api/update-note`,
+      {
+        method: 'POST',
+        headers: {
+          'Authorization': token,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          name,
+          text,
+          favorite,
+          video_link,
+          audio_link
+        })
+      }
+    );
+
+
+    const resData = await response.json();
+
+    //print response from API
+    console.log(resData)
+
+        dispatch({
+          type: UPDATE_NOTE,
+          noteData: {
+            name: resData.name,
+            text: resData.text,
+            favorite: resData.favorite,
+            video_link: resData.video_link,
+            audio_link: resData.audio_link,
+            created_at: resData.created_at,
+            accessed_at: resData.accessed_at
+          }
+        });
+
+      } catch(err){
+        console.log("server not okay")
+        throw new Error(err.message);
+       }
+  };
+};

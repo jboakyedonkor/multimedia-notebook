@@ -1,6 +1,6 @@
 class Note {
 
-    constructor (name, text, video_link, audio_link, created_at = '', accessed_at = '' ){
+    constructor (name, text, video_link, audio_link, created_at = '', accessed_at = '', favorite = false ){
 
     
         this.name = name;
@@ -9,6 +9,7 @@ class Note {
         this.audio_link = audio_link;
         this.created_at = created_at;
         this.accessed_at = accessed_at;
+        this.favorite = favorite;
     }
 }
 

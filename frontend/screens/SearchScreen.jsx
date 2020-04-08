@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { SafeAreaView, View, Text, StyleSheet, ScrollView, FlatList } from 'react-native';
-import { SearchBar, ListItem } from 'react-native-elements';
+import { SearchBar, ListItem, Icon } from 'react-native-elements';
 import { useDispatch, useSelector } from 'react-redux';
 
 
@@ -37,10 +37,9 @@ const SearchScreen = props => {
     }
 
     const deleteNote = async (noteTobeDeleted) => {
-        
+
         try {
             await dispatch(notesActions.deleteNote(noteTobeDeleted))
-            fetchNotes("")
 
 
         } catch (err) {
@@ -64,6 +63,16 @@ const SearchScreen = props => {
 
     )
 
+    const updateFavorite = async ({name, text, favorite, video_link, audio_link}) => {
+
+        try{
+            await dispatch(notesActions.updateNote(name, text, video_link,audio_link,!favorite));
+        } catch(err) {
+            console.log(err.message);
+        }
+
+    }
+
 
     return (
 
@@ -81,7 +90,7 @@ const SearchScreen = props => {
                 data={searchedNotes}
                 keyExtractor={(item, index) => index.toString()}
                 renderItem={({ item }) => (
-                    //console.log(searchedNotes)
+                    
                     //<Text>{item.name}</Text>
 
                     <ListItem
@@ -89,6 +98,11 @@ const SearchScreen = props => {
                         subtitle={item.text}
                         bottomDivider
                         chevron
+                        rightIcon = {<Icon
+                            name={item.favorite ? 'ios-star' : 'ios-star-outline'}
+                            type='ionicon'
+                            color = '#DA4633'
+                            onPress={() => updateFavorite(item)} />}
                     />
 
                 )}
