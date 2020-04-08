@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { SafeAreaView, View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
-import { Avatar } from 'react-native-elements';
+import { Avatar} from 'react-native-elements';
 
 import * as authActions from '../store/actions/auth.js';
 
