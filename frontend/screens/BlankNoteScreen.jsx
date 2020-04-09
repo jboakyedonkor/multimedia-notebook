@@ -1,13 +1,16 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import {
     View,
+    Text,
     TextInput,
     StyleSheet,
     Dimensions,
     ScrollView,
     Platform,
     Alert,
-    ActivityIndicator
+    ActivityIndicator,
+    TouchableOpacity,
+    Button
 } from 'react-native';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { useDispatch } from 'react-redux';
@@ -15,21 +18,33 @@ import { useDispatch } from 'react-redux';
 
 
 import HeaderButton from '../components/HeaderButton';
+import { Input } from 'react-native-elements';
+import { Chip } from 'react-native-paper';
+
+import Tags from "react-native-tags";
+
+
 import * as notesActions from '../store/actions/notes';
 import NewNoteOverlayDisplay from '../components/NewNoteOverlayDisplay';
+import { Dialog } from 'react-native-simple-dialogs';
+import { Ionicons, MaterialCommunityIcons, EvilIcons } from '@expo/vector-icons';
 
-
+let tagArr = [];
 const BlankNoteScreen = props => {
 
     const dispatch = useDispatch();
 
     const [title, setTitle] = useState("")
     const [body, setBody] = useState("")
+
     const [titleIsInvalid, setTitleIsInvalid] = useState(true)
     const [bodyIsInvalid, setBodyIsInvalid] = useState(true)
-    const [modalIsVisible, setModalIsVisible] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState();
+
+    
+
+
 
     titleChangeHandler = (text) => {
         setTitle(text)
@@ -48,9 +63,6 @@ const BlankNoteScreen = props => {
         }
     }
 
-    displayOptionModal = () => {
-        setModalIsVisible(true);
-    }
 
     submitHandler = useCallback(async () => {
         if (titleIsInvalid || bodyIsInvalid) {
@@ -67,9 +79,11 @@ const BlankNoteScreen = props => {
                 title,
                 body,
                 "https://www.googleapis.com/youtube/v3",
-                "https://www.googleapis.com/youtube/v3"
+                "https://www.googleapis.com/youtube/v3",
+                tagArr
             )
             );
+            tagArr = []
             props.navigation.goBack();
         } catch (err) {
             console.log(err.message)
@@ -83,11 +97,18 @@ const BlankNoteScreen = props => {
             headerRight: () => (
                 <HeaderButtons HeaderButtonComponent={HeaderButton}>
                     <Item
-                        title="Info"
+                        title="camera"
                         iconName={
-                            Platform.OS === 'android' ? 'ios-more' : 'ios-more'
+                            Platform.OS === 'android' ? 'ios-camera' : 'ios-camera'
                         }
-                        onPress={displayOptionModal}
+                        //onPress={displayTagDialog}
+                    />
+                    <Item
+                        title="mic"
+                        iconName={
+                            Platform.OS === 'android' ? 'ios-mic' : 'ios-mic'
+                        }
+                        //onPress={displayTagDialog}
                     />
                     <Item
                         title="Save"
@@ -111,15 +132,48 @@ const BlankNoteScreen = props => {
         );
     }
 
+
     return (
         <View style={styles.screen}>
-            <NewNoteOverlayDisplay
-                isVisible={modalIsVisible}
-                removeModal={() => setModalIsVisible(false)}
+
+            <Text>Tags:</Text>
+            <Tags
+                initialText=""
+                textInputProps={{
+                    placeholder: "Type in tag and space to enter, tap on tag to remove",
+                    placeholderTextColor: 'black'
+                }}
+                initialTags={tagArr}
+                onChangeTags={tags => {
+                    tagArr = tags
+                    //console.log("--------------------")
+                    console.log(tagArr)
+                }}
+                containerStyle={{ justifyContent: "center", padding: 10 }}
+                onTagPress={(index, tagLabel, event, deleted) => {
+
+                    //console.log(index, tagLabel, event, deleted ? "deleted" : "not deleted")
+                }
+                }
+                containerStyle={{ justifyContent: "center" }}
+                //inputStyle={{ backgroundColor: "white" }}
+                renderTag={({ tag, index, onPress, deleteTagOnPress, readonly }) => (
+                    <TouchableOpacity key={`${tag}-${index}`} onPress={onPress}>
+                        <View
+                            key={`${tag}-${index}`}
+                            style={styles.tagView}
+                        >
+                            <Text>#{tag}</Text>
+                        </View>
+                    </TouchableOpacity>
+                )}
             />
+
+
             <ScrollView
                 style={styles.scrollview}
             >
+
                 <View style={styles.blankNoteContainer}>
                     <View style={styles.titleViewContainer}>
                         <TextInput
@@ -152,11 +206,11 @@ const styles = new StyleSheet.create({
 
     screen: {
         height: '100%',
-        width: '100%',
+        //width: '100%',
         //justifyContent: 'center',
         paddingHorizontal: 15,
         paddingVertical: 10,
-        alignItems: 'center',
+        //alignItems: 'center',
     },
 
     scrollview: {
@@ -189,7 +243,30 @@ const styles = new StyleSheet.create({
         borderBottomColor: 'black',
         borderBottomWidth: 3,
         height: Dimensions.get('window').height
-
+    },
+    groupButtonContainer: {
+        paddingVertical: '10%',
+        paddingHorizontal: '10%',
+    },
+    singleButtonContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between'
+        //borderWidth: 3,
+    },
+    icon: {
+        paddingRight: 10
+    },
+    tagView: {
+        borderRadius: 10,
+        borderRadius: 100,
+        shadowColor: 'black',
+        shadowOffset: { width: 0, height: 2 },
+        shadowRadius: 1,
+        shadowOpacity: 0.26,
+        backgroundColor: 'white',
+        paddingVertical: 2,
+        paddingHorizontal: 5,
+        marginHorizontal: 5
     }
 
 });

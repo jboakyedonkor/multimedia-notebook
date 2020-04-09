@@ -32,6 +32,7 @@ const LandingScreen = props => {
 
     const dispatch = useDispatch();
     const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState();
 
     createNewNoteHandler = useCallback(() => {
         props.navigation.navigate({ name: 'BlankScreen' });
@@ -57,9 +58,6 @@ const LandingScreen = props => {
         setModalIsVisible(true);
     }
 
-    openBlankScreen = () => {
-
-    }
 
     /*
     useEffect(() => {
@@ -71,14 +69,23 @@ const LandingScreen = props => {
     }, [dispatch]);
     */
 
-    //get currently logged in user info 
+   fetchData = useCallback(async () => {
+    try {
+        await dispatch(userActions.getUserInfo());
+        await dispatch(notesActions.fetchNotes());
+    } catch (err) {
+        setError(err.message);
+        //throw new Error(err.message);
+        //Alert.alert("Could not load note")
+
+    }
+
+}, [dispatch]);
+
+    //get currently logged in user info and fetch different data needed for the app
     useEffect(() => {
         setIsLoading(true);
-        try {
-            dispatch(userActions.getUserInfo());
-        } catch (err) {
-            //Alert.alert("Could not load note")
-        }
+        fetchData();
         setIsLoading(false);
     }, [dispatch]);
 
