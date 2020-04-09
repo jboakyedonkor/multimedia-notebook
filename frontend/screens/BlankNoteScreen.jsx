@@ -17,6 +17,8 @@ import { useDispatch } from 'react-redux';
 import HeaderButton from '../components/HeaderButton';
 import * as notesActions from '../store/actions/notes';
 import NewNoteOverlayDisplay from '../components/NewNoteOverlayDisplay';
+import { Translation } from 'react-i18next';
+import i18n from "../i18n.js"
 
 
 const BlankNoteScreen = props => {
@@ -112,36 +114,43 @@ const BlankNoteScreen = props => {
     }
 
     return (
-        <View style={styles.screen}>
-            <NewNoteOverlayDisplay
-                isVisible={modalIsVisible}
-                removeModal={() => setModalIsVisible(false)}
-            />
-            <ScrollView
-                style={styles.scrollview}
-            >
-                <View style={styles.blankNoteContainer}>
-                    <View style={styles.titleViewContainer}>
-                        <TextInput
-                            style={styles.title}
-                            maxLength={20}
-                            placeholder={'Title'}
-                            onChangeText={titleChangeHandler}
-                            returnKeyType='next'
-                        />
+        <Translation>
+        {(t, {i18n}) =>
+            <View style={styles.screen}>
+                <NewNoteOverlayDisplay
+                    isVisible={modalIsVisible}
+                    removeModal={() => setModalIsVisible(false)}
+                />
+                <ScrollView
+                    style={styles.scrollview}
+                >
+                    <View style={styles.blankNoteContainer}>
+                        <View style={styles.titleViewContainer}>
+                            <TextInput
+                                style={styles.title}
+                                maxLength={20}
+                                placeholder={t('Title')}
+                                onChangeText={titleChangeHandler}
+                                returnKeyType='next'
+                            />
+                    
+                        </View>
+                        <View style={styles.textViewContainer}>
+                            <TextInput
+                                style={styles.text}
+                                multiline={true}
+                                placeholder={t('Start writing')}
+                                onChangeText={bodyChangeHandler}
+                                returnKeyType='next'
+                            />
+                            
+                        </View>
                     </View>
-                    <View style={styles.textViewContainer}>
-                        <TextInput
-                            style={styles.text}
-                            multiline={true}
-                            placeholder={'Start writing'}
-                            onChangeText={bodyChangeHandler}
-                            returnKeyType='next'
-                        />
-                    </View>
-                </View>
-            </ScrollView>
-        </View >
+                </ScrollView>
+            </View >
+        }
+        </Translation>
+        
 
     )
 

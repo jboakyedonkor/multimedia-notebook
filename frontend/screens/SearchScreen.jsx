@@ -9,6 +9,8 @@ import { SwipeListView } from 'react-native-swipe-list-view';
 import * as notesActions from '../store/actions/notes';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
+import { Translation } from 'react-i18next';
+import i18n from "../i18n.js"
 
 
 const SearchScreen = props => {
@@ -51,16 +53,20 @@ const SearchScreen = props => {
 
     const renderHiddenItem = (itemData, itemMap) => (
 
-        <View style={styles.rowBack}>
-            <View style={[styles.backRightBtn, styles.backRightBtnRight]}>
-                <Text
-                    style={styles.backTextWhite}
-                    onPress={() => deleteNote(itemData.item.name)}
-                >
-                    Delete</Text>
+        <Translation>
+        {(t, {i18n}) =>
+            <View style={styles.rowBack}>
+                <View style={[styles.backRightBtn, styles.backRightBtnRight]}>
+                    <Text
+                        style={styles.backTextWhite}
+                        onPress={() => deleteNote(itemData.item.name)}
+                    >
+                        {t('Delete')}</Text>
+                    
+                </View>
             </View>
-        </View>
-
+        }
+        </Translation>
     )
 
     const updateFavorite = async ({name, text, favorite, video_link, audio_link}) => {
@@ -75,52 +81,58 @@ const SearchScreen = props => {
 
 
     return (
+        <Translation>
+        {(t, {i18n}) =>
+            <SafeAreaView style={styles.screen}>
+                
+                        <SearchBar
+                            platform={Platform.OS === 'android' ? 'android' : 'ios'}
+                            placeholder={t("Enter title of note")}
+                            onChangeText={updateSearchField}
+                            value={searchText}
+                            lightTheme
+                            round
+                            placeholderTextColor='black'
+                        />
+                
+                
+                <SwipeListView
+                    data={searchedNotes}
+                    keyExtractor={(item, index) => index.toString()}
+                    renderItem={({ item }) => (
+                        
+                        //<Text>{item.name}</Text>
 
-        <SafeAreaView style={styles.screen}>
-            <SearchBar
-                platform={Platform.OS === 'android' ? 'android' : 'ios'}
-                placeholder="Enter title of note"
-                onChangeText={updateSearchField}
-                value={searchText}
-                lightTheme
-                round
-                placeholderTextColor='black'
-            />
-            <SwipeListView
-                data={searchedNotes}
-                keyExtractor={(item, index) => index.toString()}
-                renderItem={({ item }) => (
-                    
-                    //<Text>{item.name}</Text>
+                        <ListItem
+                            title={item.name}
+                            subtitle={item.text}
+                            bottomDivider
+                            chevron
+                            rightIcon = {<Icon
+                                name={item.favorite ? 'ios-star' : 'ios-star-outline'}
+                                type='ionicon'
+                                color = '#DA4633'
+                                onPress={() => updateFavorite(item)} />}
+                        />
 
-                    <ListItem
-                        title={item.name}
-                        subtitle={item.text}
-                        bottomDivider
-                        chevron
-                        rightIcon = {<Icon
-                            name={item.favorite ? 'ios-star' : 'ios-star-outline'}
-                            type='ionicon'
-                            color = '#DA4633'
-                            onPress={() => updateFavorite(item)} />}
-                    />
+                    )}
+                    renderHiddenItem={renderHiddenItem}
+                    leftOpenValue={75}
+                    rightOpenValue={0}
+                /*
+                onRowOpen = {(itemKey, itemMap) => {
+                    console.log("--------------------------------------------------------------")
+                    console.log(itemMap)
+                    setTimeout(() => {
+                        itemMap[itemKey].closeRow()
+                    }, 3000)
+                }}
+                */
 
-                )}
-                renderHiddenItem={renderHiddenItem}
-                leftOpenValue={75}
-                rightOpenValue={0}
-            /*
-            onRowOpen = {(itemKey, itemMap) => {
-                console.log("--------------------------------------------------------------")
-                console.log(itemMap)
-                setTimeout(() => {
-                    itemMap[itemKey].closeRow()
-                }, 3000)
-            }}
-            */
-
-            />
-        </SafeAreaView>
+                />
+            </SafeAreaView>
+        }
+        </Translation>
     )
 }
 

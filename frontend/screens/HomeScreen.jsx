@@ -6,52 +6,69 @@ import CustomButton from '../components/CustomButton';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView } from 'react-native-gesture-handler';
 
+import { Translation } from 'react-i18next';
+import i18n from "../i18n.js"
+
 const HomeScreen = props => {
 
 
     return (
-
-        <SafeAreaView style={styles.screen}>
-            <View style={styles.headerContainer}>
-                <Text style={styles.headerText}>MULTI MEDIA NOTES</Text>
-            </View>
-
-
-            <View style={styles.imageContainer}>
-                <Image
-                    source={require('../assets/images/homepage.png')}
-                    style={styles.image}
-                    resizeMode='cover'
-                />
-            </View>
-
-            <View style={styles.footerContainer}>
-                <View style={styles.footerTextContainer}>
-                    <Text style={styles.footerTextLg}>Create free notes</Text>
-                    <Text>Welcome, we are happy that you are here</Text>
-                    <Text>Now you can create multimedia notes for free!</Text>
+        <Translation>
+        {(t, i18n) =>
+            <SafeAreaView style={styles.screen}>
+                <View style={styles.headerContainer}>
+                    <Text style={styles.headerText}>{t('MULTIMEDIA NOTES')}</Text>
                 </View>
 
-                <CustomButton
-                    style={styles.footerButton}
-                    title='SIGN IN'
-                    color={'black'}
-                    onPress={() => {
-                        props.navigation.navigate({ name: 'Login' });
-                    }}
-                />
 
+                <View style={styles.imageContainer}>
+                    <Image
+                        source={require('../assets/images/homepage.png')}
+                        style={styles.image}
+                        resizeMode='cover'
+                    />
+                </View>
 
-                <CustomButton
-                    style={{ ...styles.footerButton, backgroundColor: '#DA4633' }}
-                    title='CREATE NEW ACCOUNT'
-                    color={'black'}
-                    onPress={() => {
-                        props.navigation.navigate({ name: 'SignUp' });
-                    }}
-                />
-            </View>
-        </SafeAreaView>
+                <View style={styles.footerContainer}>
+                    <View style={styles.footerTextContainer}>
+                        <Text style={styles.footerTextLg}>{t('Create free notes!')}</Text>
+                        <Text>{t('Welcome, we are happy that you are here.')}</Text>
+                        <Text>{t('Now you can create multimedia notes for free!')}</Text>
+                    </View>
+
+                    <CustomButton
+                        style={styles.footerButton}
+                        title={t('Change language')}    
+                        color={'black'}
+                        onPress={() => {
+                            props.navigation.navigate({ name: 'ChangeLang' })
+                        }}
+                    />
+
+                    <CustomButton
+                        style={styles.footerButton}
+                        title={t('Sign in')}
+                        color={'black'}
+                        onPress={() => {
+                            props.navigation.navigate({ name: 'Login' });
+                        }}
+                    />
+
+                    <CustomButton
+                        style={{ ...styles.footerButton, backgroundColor: '#DA4633' }}
+                        title={t('Create account')}
+                        color={'black'}
+                        onPress={() => {
+                            props.navigation.navigate({ name: 'SignUp' });
+                        }}
+                    />
+                    
+                </View>
+            </SafeAreaView>
+        }
+        </Translation>
+
+    
 
     )
 }

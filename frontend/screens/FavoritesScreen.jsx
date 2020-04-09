@@ -1,14 +1,18 @@
 import React from 'react';
 import {SafeAreaView, View, Text, StyleSheet} from 'react-native';
-
+import { Translation } from 'react-i18next';
+import i18n from "../i18n.js"
 
 const FavoritesScreen = props => {
     
     return (
-
-        <SafeAreaView style = {styles.screen}>
-            <Text>Favorites screen</Text>
-        </SafeAreaView>
+        <Translation>
+        {(t, {i18n}) =>
+            <SafeAreaView style = {styles.screen}>
+                <Text>{t('Favorites screen')}</Text>
+            </SafeAreaView>
+        }
+        </Translation>
     )
 }
 
