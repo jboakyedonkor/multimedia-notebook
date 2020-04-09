@@ -33,7 +33,7 @@ export const LandingPageNavigator = () => {
             <LandingPageStackNavigator.Screen
                 name='BlankScreen'
                 component={BlankNoteScreen}
-                options={{ headerTitle: 'Blank Note' }}
+                options={{ headerTitle: '' }}
             />
         </LandingPageStackNavigator.Navigator>
     )
@@ -50,6 +50,21 @@ export const UserDashboardNavigator = () => {
             />
 
         </UserDashboardStackNavigator.Navigator>
+    )
+}
+
+const FavoritesStackNavigator = createStackNavigator();
+export const FavoritesNavigator = () => {
+
+    return(
+        <FavoritesStackNavigator.Navigator>
+            <FavoritesStackNavigator.Screen
+                name = 'Favorites'
+                component = {FavoritesScreen}
+                options = {{headerTitle: 'Favorites'}}
+            />
+
+        </FavoritesStackNavigator.Navigator>
     )
 }
 
@@ -73,7 +88,7 @@ const LoggedInNavigator = () => {
             />
             <LoggedInTabNavigator.Screen
                 name='Favorites'
-                component={FavoritesScreen}
+                component={FavoritesNavigator}
                 options={{
                     tabBarLabel: 'Favorites',
                     tabBarIcon: ({ color, size }) => {

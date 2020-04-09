@@ -7,7 +7,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { SwipeListView } from 'react-native-swipe-list-view';
 
 import * as notesActions from '../store/actions/notes';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 
 
 
@@ -18,21 +17,14 @@ const SearchScreen = props => {
     const [searchText, setSearchText] = useState('');
     const [error, setError] = useState();
 
-    const updateSearchField = search => {
-        setSearchText(search)
-        fetchNotes(search)
+    const updateSearchField = searchTextField => {
+        setSearchText(searchTextField);
+        searchNotes(searchTextField);
     }
 
-    const fetchNotes = async (noteToFind) => {
+    const searchNotes = async (noteToFind) => {
 
-        try {
-            await dispatch(notesActions.searchNotes(noteToFind))
-
-        } catch (err) {
-            console.log(err.message)
-            setError(err.message)
-
-        }
+        await dispatch(notesActions.searchNotes(noteToFind))
 
     }
 
@@ -55,7 +47,10 @@ const SearchScreen = props => {
             <View style={[styles.backRightBtn, styles.backRightBtnRight]}>
                 <Text
                     style={styles.backTextWhite}
-                    onPress={() => deleteNote(itemData.item.name)}
+                    onPress={() => {
+                    itemMap[itemData.index].closeRow()
+                    deleteNote(itemData.item.name)
+                    }}
                 >
                     Delete</Text>
             </View>
@@ -63,14 +58,19 @@ const SearchScreen = props => {
 
     )
 
-    const updateFavorite = async ({name, text, favorite, video_link, audio_link}) => {
+    const updateFavorite = async ({ name, text, favorite, video_link, audio_link, created_at, accessed_at }) => {
 
-        try{
-            await dispatch(notesActions.updateNote(name, text, video_link,audio_link,!favorite));
-        } catch(err) {
+        try {
+            //update favorite's array in store
+            await dispatch(notesActions.updateFavorites(name, text, favorite, video_link, audio_link, created_at, accessed_at));
+            //update database and all store
+            await dispatch(notesActions.updateNote(name, text, video_link, audio_link, !favorite));
+
+        } catch (err) {
             console.log(err.message);
+            return;
         }
-
+        
     }
 
 
@@ -90,7 +90,7 @@ const SearchScreen = props => {
                 data={searchedNotes}
                 keyExtractor={(item, index) => index.toString()}
                 renderItem={({ item }) => (
-                    
+
                     //<Text>{item.name}</Text>
 
                     <ListItem
@@ -98,10 +98,10 @@ const SearchScreen = props => {
                         subtitle={item.text}
                         bottomDivider
                         chevron
-                        rightIcon = {<Icon
+                        rightIcon={<Icon
                             name={item.favorite ? 'ios-star' : 'ios-star-outline'}
                             type='ionicon'
-                            color = '#DA4633'
+                            color='#DA4633'
                             onPress={() => updateFavorite(item)} />}
                     />
 
