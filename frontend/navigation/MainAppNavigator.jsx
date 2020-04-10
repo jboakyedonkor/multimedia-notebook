@@ -23,7 +23,9 @@ import BlankNoteScreen from '../screens/BlankNoteScreen';
 const LandingPageStackNavigator = createStackNavigator();
 export const LandingPageNavigator = () => {
     return (
-        <LandingPageStackNavigator.Navigator>
+        <LandingPageStackNavigator.Navigator
+            mode = 'modal'
+        >
             <LandingPageStackNavigator.Screen
                 name='Landing'
                 component={LandingScreen}
@@ -80,6 +82,7 @@ const LoggedInNavigator = () => {
                 name='LandingPage'
                 component={LandingPageNavigator}
                 options={{
+                    
                     tabBarLabel: 'Home',
                     tabBarIcon: ({ color, size }) => {
                         return <FontAwesome name='home' size={size} color={color} />
