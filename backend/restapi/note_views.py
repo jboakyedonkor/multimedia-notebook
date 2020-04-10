@@ -143,6 +143,8 @@ def update_note(request):
     if 'current_name' in keys and 'new_name' in keys:
         current_name =body.pop('current_name')
         body['name'] = body.pop('new_name')
+    else:
+        current_name = body.pop('name')
     try:
         body['accessed_at'] = datetime.now(timezone.utc)
         current_note = Note.objects.filter(
