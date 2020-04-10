@@ -144,7 +144,7 @@ def update_note(request):
         current_name =body.pop('current_name')
         body['name'] = body.pop('new_name')
     else:
-        current_name = body.pop('name')
+        current_name = body['name']
     try:
         body['accessed_at'] = datetime.now(timezone.utc)
         current_note = Note.objects.filter(
