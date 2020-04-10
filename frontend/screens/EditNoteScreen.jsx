@@ -10,7 +10,7 @@ import {
     Alert,
     ActivityIndicator,
     TouchableOpacity,
-    Button
+    Image
 } from 'react-native';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { useDispatch, useSelector } from 'react-redux';
@@ -20,7 +20,7 @@ import * as Permissions from 'expo-permissions';
 
 
 import HeaderButton from '../components/HeaderButton';
-import { Input } from 'react-native-elements';
+import { Input, Icon } from 'react-native-elements';
 import { Chip } from 'react-native-paper';
 
 import Tags from "react-native-tags";
@@ -37,21 +37,61 @@ const EditNoteScreen = props => {
     const dispatch = useDispatch();
 
     const noteName = props.route.params ? props.route.params.noteName : null;
+
+    
+
     const editedNote = useSelector(state =>
         state.notes.allNotes.find(note => note.name === noteName)
-      );
+    );
 
+    console.log(editedNote.name);
+
+    const [currentTitle, setCurrentTitle] = useState(editedNote.name)
     const [title, setTitle] = useState(editedNote.name)
     const [body, setBody] = useState(editedNote.text)
+    const [pickedImage, setPickedImage] = useState(editedNote.video_link);
 
     const [titleIsInvalid, setTitleIsInvalid] = useState(true)
     const [bodyIsInvalid, setBodyIsInvalid] = useState(true)
     const [isLoading, setIsLoading] = useState(false);
+    const [isImageDialogVisible, setIsImageDialogVisible] = useState(false);
     const [error, setError] = useState();
 
     
 
+    const verifyPermissions = async () => {
+        const result = await Permissions.askAsync(
+            Permissions.CAMERA_ROLL,
+            Permissions.CAMERA
+        );
+        if (result.status !== 'granted') {
+            Alert.alert(
+                'Insufficient permissions!',
+                'You need to grant camera permissions to use this app.Go to settings to change permissions.',
+                [{ text: 'Okay' }]
+            );
+            return false;
+        }
+        return true;
+    };
 
+    const takeImageHandler = async () => {
+        const hasPermission = await verifyPermissions();
+        if (!hasPermission) {
+            return;
+        }
+        const image = await ImagePicker.launchCameraAsync({
+            //allowsEditing: true,
+            quality: 0.5
+        });
+
+        setPickedImage(image.uri);
+    };
+
+
+    const showImageDialog = () => {
+        setIsImageDialogVisible(true);
+    }
 
     const titleChangeHandler = (text) => {
         setTitle(text)
@@ -73,22 +113,32 @@ const EditNoteScreen = props => {
 
 
     const submitHandler = useCallback(async () => {
+
+        /*
         if (titleIsInvalid || bodyIsInvalid) {
             Alert.alert('Empty input!', 'Please enter text in the form.', [
                 { text: 'Okay' }
             ]);
             return;
         }
+        */
         setError(null);
         setIsLoading(true);
 
         try {
-            await dispatch(notesActions.createNote(
+
+            console.log(currentTitle)
+            console.log(title)
+            console.log(body)
+            
+            await dispatch(notesActions.updateNoteWithNewTitle(
+                currentTitle,
                 title,
                 body,
+                pickedImage,
                 "https://www.googleapis.com/youtube/v3",
-                "https://www.googleapis.com/youtube/v3",
-                tagArr
+                tagArr,
+
             )
             );
             tagArr = []
@@ -109,7 +159,7 @@ const EditNoteScreen = props => {
                         iconName={
                             Platform.OS === 'android' ? 'ios-camera' : 'ios-camera'
                         }
-                        //onPress={displayTagDialog}
+                        onPress={takeImageHandler}
                     />
                     <Item
                         title="mic"
@@ -143,7 +193,36 @@ const EditNoteScreen = props => {
 
     return (
         <View style={styles.screen}>
+            <Dialog
+                visible={isImageDialogVisible}
+                title="Image preview"
+                onTouchOutside={() => setIsImageDialogVisible(false)} >
+                <View style={styles.imagePicker}>
+                    <View style={styles.imagePreview}>
+                        <Image style={styles.image} source={{ uri: pickedImage }} />
+                    </View>
+                </View>
+            </Dialog>
 
+            <View style={{
+                flexDirection: 'row',
+                justifyContent: 'flex-end'
+            }}>
+                {
+                    !pickedImage ? (
+                        <View></View>
+                    ) : (
+                            <View style={{ paddingHorizontal: 10 }}>
+                                <Icon
+                                    name='image'
+                                    type='font-awesome'
+                                    color='black'
+                                    onPress={showImageDialog}
+                                />
+                            </View>
+                        )
+                }
+            </View>
             <Text>Tags:</Text>
             <Tags
                 initialText=""
@@ -277,7 +356,24 @@ const styles = new StyleSheet.create({
         paddingVertical: 2,
         paddingHorizontal: 5,
         marginHorizontal: 5
-    }
+    },
+    imagePicker: {
+        alignItems: 'center',
+        marginBottom: 15
+      },
+      imagePreview: {
+        width: '100%',
+        height: 200,
+        marginBottom: 10,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderColor: '#ccc',
+        borderWidth: 1
+      },
+      image: {
+        width: '100%',
+        height: '100%'
+      }
 
 });
 

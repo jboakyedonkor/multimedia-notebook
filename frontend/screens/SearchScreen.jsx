@@ -23,8 +23,11 @@ const SearchScreen = props => {
     }
 
     const searchNotes = async (noteToFind) => {
-
-        await dispatch(notesActions.searchNotes(noteToFind))
+        try{
+            await dispatch(notesActions.searchNotes(noteToFind))
+        } catch (err){
+            setError(err.message)
+        }
 
     }
 
@@ -81,6 +84,9 @@ const SearchScreen = props => {
         }
         
     }
+    const editNoteHandler = name => {
+        props.navigation.navigate('EditNoteScreen', { noteName: name });
+    };
 
 
     return (
@@ -103,6 +109,7 @@ const SearchScreen = props => {
                     //<Text>{item.name}</Text>
 
                     <ListItem
+                        onPress = {() => editNoteHandler(item.name)}
                         title={item.name}
                         subtitle={item.text}
                         bottomDivider
