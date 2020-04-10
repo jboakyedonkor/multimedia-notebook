@@ -32,5 +32,10 @@
   "Sign out": "Sign out",
   "Blank Note": "Blank Note",
   "New Account": "New Account",
-  "Favorites screen": "Favorites screen"
+  "Favorites screen": "Favorites screen",
+  "Type in tag and space to enter, tap on tag to remove": "Type in tag and space to enter, tap on tag to remove",
+  "Tags": "Tags",
+  "You currently do not have any favorite notes!": "You currently do not have any favorite notes!",
+  "Tap on star icon to add note to favorites": "Tap on star icon to add note to favorites",
+  "You currently do not have any popular tags": "You currently do not have any popular tags"
 }

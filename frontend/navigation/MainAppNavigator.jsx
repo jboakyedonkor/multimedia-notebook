@@ -29,7 +29,9 @@ export const LandingPageNavigator = () => {
     return (
         <Translation>
         {(t, {i18n}) =>
-            <LandingPageStackNavigator.Navigator>
+            <LandingPageStackNavigator.Navigator
+            mode = 'modal'
+            >
                 <LandingPageStackNavigator.Screen
                     name='Landing'
                     component={LandingScreen}
@@ -39,7 +41,7 @@ export const LandingPageNavigator = () => {
                 <LandingPageStackNavigator.Screen
                     name='BlankScreen'
                     component={BlankNoteScreen}
-                    options={{ headerTitle: t('Blank Note') }}
+                    options={{ headerTitle: '' }}
                 />
             </LandingPageStackNavigator.Navigator>
         }
@@ -69,6 +71,25 @@ export const UserDashboardNavigator = () => {
     )
 }
 
+const FavoritesStackNavigator = createStackNavigator();
+export const FavoritesNavigator = () => {
+
+    return(
+        <Translation>
+        {(t, {i18n}) =>
+            <FavoritesStackNavigator.Navigator>
+                <FavoritesStackNavigator.Screen
+                    name = 'Favorites'
+                    component = {FavoritesScreen}
+                    options = {{headerTitle: t('Favorites')}}
+                />
+
+            </FavoritesStackNavigator.Navigator>
+        }
+        </Translation>
+    )
+}
+
 const LoggedInTabNavigator = createBottomTabNavigator();
 const LoggedInNavigator = () => {
     return (
@@ -77,12 +98,13 @@ const LoggedInNavigator = () => {
             <LoggedInTabNavigator.Navigator
                 tabBarOptions={{
                     activeTintColor: '#DA4633'
-                }}  
+                }}
             >
                 <LoggedInTabNavigator.Screen
                     name='LandingPage'
                     component={LandingPageNavigator}
                     options={{
+                        
                         tabBarLabel: t('Home'),
                         tabBarIcon: ({ color, size }) => {
                             return <FontAwesome name='home' size={size} color={color} />
@@ -91,7 +113,7 @@ const LoggedInNavigator = () => {
                 />
                 <LoggedInTabNavigator.Screen
                     name='Favorites'
-                    component={FavoritesScreen}
+                    component={FavoritesNavigator}
                     options={{
                         tabBarLabel: t('Favorites'),
                         tabBarIcon: ({ color, size }) => {
@@ -122,7 +144,6 @@ const LoggedInNavigator = () => {
             </LoggedInTabNavigator.Navigator>
         }
         </Translation>
-        
     )
 }
 
@@ -145,7 +166,7 @@ const AuthNavigator = () => {
                     component={ChangeLangScreen}
                     options={{
                         headerShown: true,
-                        headerTitle: t("Change language")
+                        headerTitle: t('Change language')
                     }}
                 />
                 <AuthStackNavigator.Screen

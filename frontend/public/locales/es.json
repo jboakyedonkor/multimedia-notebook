@@ -32,5 +32,10 @@
   "Sign out": "Desconectar",
   "Blank Note": "Nota en Blanco",
   "New Account": "Nueva Cuenta",
-  "Favorites screen": "Pantalla de favoritos"
+  "Favorites screen": "Pantalla de favoritos",
+  "Type in tag and space to enter, tap on tag to remove": "Escriba la etiqueta y el espacio para ingresar, toque la etiqueta para eliminar",
+  "Tags": "Etiquetas",
+  "You currently do not have any favorite notes!": "¡Actualmente no tienes notas favoritas!",
+  "Tap on star icon to add note to favorites": "Toque el icono de estrella para agregar una nota a favoritos",
+  "You currently do not have any popular tags": "Actualmente no tienes ninguna etiqueta popular"
 }

@@ -32,5 +32,10 @@
   "Sign out": "خروج",
   "Blank Note": "ملاحظة فارغة",
   "New Account": "حساب جديد",
-  "Favorites screen": "شاشة المفضلة"
+  "Favorites screen": "شاشة المفضلة",
+  "Type in tag and space to enter, tap on tag to remove": "اكتب علامة ومساحة للدخول ، انقر فوق علامة للإزالة",
+  "Tags": "العلامات",
+  "You currently do not have any favorite notes!": "ليس لديك حاليا أي ملاحظات مفضلة!",
+  "Tap on star icon to add note to favorites": "اضغط على أيقونة النجمة لإضافة ملاحظة إلى المفضلة",
+  "You currently do not have any popular tags": "ليس لديك حاليًا أي علامات شائعة"
 }

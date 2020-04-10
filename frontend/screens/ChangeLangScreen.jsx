@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, Button, Dimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import CustomButton from '../components/CustomButton';
-import i18n from "../i18n.js"
+import i18n from "../i18n.js";
 
 
 const ChangeLangScreen = props => {

@@ -135,15 +135,20 @@ def update_note(request):
     body = request.data
     delete_tags = []
     add_tags = []
-    if 'delete_tags' in body.keys():
+    keys = body.keys()
+    if 'delete_tags' in keys:
         delete_tags = body.pop('delete_tags')
-    if 'add_tags' in body.keys():
+    if 'add_tags' in keys:
         add_tags = body.pop('add_tags')
+    if 'current_name' in keys and 'new_name' in keys:
+        current_name =body.pop('current_name')
+        body['name'] = body.pop('new_name')
+    else:
+        current_name = body['name']
     try:
         body['accessed_at'] = datetime.now(timezone.utc)
         current_note = Note.objects.filter(
-            name=body['name']).filter(
-            user=request.user)
+            name=current_name ,user=request.user)
         if not current_note.exists():
             return Response({'message': "note does not exist"},
                             status=status.HTTP_200_OK)
@@ -165,6 +170,7 @@ def update_note(request):
             tag.notes.add(current_note[0])
 
         current_note.update(**body)
+        current_note = Note.objects.filter(name=body['name'],user=request.user)
         serializer = NoteSerializer(current_note[0])
 
         return Response(

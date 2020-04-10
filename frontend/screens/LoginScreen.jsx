@@ -9,7 +9,7 @@ import * as authActions from '../store/actions/auth';
 import { ScrollView } from 'react-native-gesture-handler';
 
 import { Translation } from 'react-i18next';
-import i18n from "../i18n.js"
+import i18n from "../i18n.js";
 
 
 const LoginScreen = props => {

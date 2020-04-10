@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { SafeAreaView, View, Text, StyleSheet, ScrollView, FlatList, Alert } from 'react-native';
+import { SafeAreaView, View, Text, StyleSheet, ScrollView, FlatList } from 'react-native';
 import { SearchBar, ListItem, Icon } from 'react-native-elements';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -32,29 +32,19 @@ const SearchScreen = props => {
 
     const deleteNote = async (noteTobeDeleted) => {
 
-        Alert.alert('Are you sure?', 'Do you really want to delete this item?', [
-            { text: 'No', style: 'default' },
-            {
-              text: 'Yes',
-              style: 'destructive',
-              onPress: async () => {
-                try {
-                    await dispatch(notesActions.deleteNote(noteTobeDeleted))
-        
-        
-                } catch (err) {
-                    console.log(err.message)
-                    setError(err.message)
-        
-                }
-              }
-            }
-          ]);
+        try {
+            await dispatch(notesActions.deleteNote(noteTobeDeleted))
+
+
+        } catch (err) {
+            console.log(err.message)
+            setError(err.message)
+
+        }
     }
 
     const renderHiddenItem = (itemData, itemMap) => (
-        <Translation>
-        {(t, {i18n}) =>
+
         <View style={styles.rowBack}>
             <View style={[styles.backRightBtn, styles.backRightBtnRight]}>
                 <Text
@@ -67,8 +57,7 @@ const SearchScreen = props => {
                     Delete</Text>
             </View>
         </View>
-        }
-        </Translation>
+
     )
 
     const updateFavorite = async ({ name, text, favorite, video_link, audio_link, created_at, accessed_at }) => {
