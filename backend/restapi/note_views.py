@@ -168,6 +168,7 @@ def update_note(request):
             tag.notes.add(current_note[0])
 
         current_note.update(**body)
+        current_note = Note.objects.filter(name=body['name'],user=request.user)
         serializer = NoteSerializer(current_note[0])
 
         return Response(
