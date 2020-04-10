@@ -4,6 +4,9 @@ import { View, Text, StyleSheet, Dimensions, Button, TouchableWithoutFeedback, T
 import { Ionicons, MaterialCommunityIcons, EvilIcons } from '@expo/vector-icons';
 import { Overlay } from "react-native-elements";
 
+import { Translation } from 'react-i18next';
+import i18n from "../i18n.js"
+
 
 const NewNoteOverlayDisplay = props => {
 
@@ -47,7 +50,11 @@ const NewNoteOverlayDisplay = props => {
                         </View>
                         <View style={styles.button}>
                             <TouchableOpacity>
-                                <Text>Add Tags</Text>
+                                <Translation>
+                                {(t, {i18n}) =>
+                                    <Text>{t('Add tags')}</Text>
+                                }
+                                </Translation>
                             </TouchableOpacity>
                         </View>
                     </View>
@@ -61,7 +68,11 @@ const NewNoteOverlayDisplay = props => {
                         </View>
                         <View style={styles.button}>
                             <TouchableOpacity>
-                                <Text>Record Audio</Text>
+                                <Translation>
+                                {(t, {i18n}) =>
+                                    <Text>{t('Record audio')}</Text>
+                                }
+                                </Translation>
                             </TouchableOpacity>
                         </View>
                     </View>
@@ -75,7 +86,11 @@ const NewNoteOverlayDisplay = props => {
                         </View>
                         <View style={styles.button}>
                             <TouchableOpacity>
-                                <Text>Add attachment</Text>
+                                <Translation>
+                                {(t, {i18n}) =>
+                                    <Text>{t('Add attachment')}</Text>
+                                }
+                                </Translation>
                             </TouchableOpacity>
                         </View>
                     </View>
@@ -90,7 +105,11 @@ const NewNoteOverlayDisplay = props => {
                         </View>
                         <View style={styles.button}>
                             <TouchableOpacity>
-                                <Text>Start sketching</Text>
+                                <Translation>
+                                {(t, {i18n}) =>
+                                    <Text>{t('Start sketching')}</Text>
+                                }
+                                </Translation>
                             </TouchableOpacity>
                         </View>
                     </View>
@@ -105,7 +124,11 @@ const NewNoteOverlayDisplay = props => {
                         </View>
                         <View style={styles.button}>
                             <TouchableOpacity>
-                                <Text>Take photo</Text>
+                                <Translation>
+                                {(t, {i18n}) =>
+                                    <Text>{t('Take photo')}</Text>
+                                }
+                                </Translation>
                             </TouchableOpacity>
                         </View>
                     </View>

@@ -5,6 +5,11 @@ import { Avatar} from 'react-native-elements';
 
 import * as authActions from '../store/actions/auth.js';
 
+import CustomButton from '../components/CustomButton';
+
+import { Translation } from 'react-i18next';
+import i18n from "../i18n.js";
+
 const UserDashboardScreen = props => {
 
 
@@ -20,14 +25,17 @@ const UserDashboardScreen = props => {
     useEffect(() => {
         props.navigation.setOptions({
             headerRight: () => (
-
-                <TouchableOpacity
-                    onPress={logOutHandler}
-                >
-                    <View style={styles.logout}>
-                        <Text style={{ color: '#DA4633', fontSize: 20 }}>Sign out</Text>
-                    </View>
-                </TouchableOpacity>
+                <Translation>
+                {(t, {i18n}) =>
+                    <TouchableOpacity
+                        onPress={logOutHandler}
+                    >
+                        <View style={styles.logout}>
+                            <Text style={{ color: '#DA4633', fontSize: 20 }}>{t('Sign out')}</Text>
+                        </View>
+                    </TouchableOpacity>
+                }
+                </Translation>
 
             )
         });
@@ -36,22 +44,33 @@ const UserDashboardScreen = props => {
 
 
     return (
-
-        <SafeAreaView style={styles.screen}>
-            <ScrollView>
-                <View style={styles.avatar}>
-                    <Avatar
-                        rounded title={first_name.charAt(0) + last_name.charAt(0)}
-                        size='xlarge'
-                        
+        <Translation>
+        {(t, {i18n}) =>
+            <SafeAreaView style={styles.screen}>
+                <ScrollView>
+                    <View style={styles.avatar}>
+                        <Avatar
+                            rounded title={first_name.charAt(0) + last_name.charAt(0)}
+                            size='xlarge'
+                            
+                        />
+                    </View>
+                    <View style = {styles.texts}>
+                        <Text style={styles.text}>{first_name + ' ' + last_name}</Text>
+                        <Text style={styles.text}>{userInfo.email}</Text>
+                    </View>
+                    <CustomButton
+                        style={styles.footerButton}
+                        title={t('Change language')}    
+                        color={'black'}
+                        onPress={() => {
+                            props.navigation.navigate({ name: 'ChangeLang' })
+                        }}
                     />
-                </View>
-                <View style = {styles.texts}>
-                    <Text style={styles.text}>{first_name + ' ' + last_name}</Text>
-                    <Text style={styles.text}>{userInfo.email}</Text>
-                </View>
-            </ScrollView>
-        </SafeAreaView>
+                </ScrollView>
+            </SafeAreaView>
+        }
+        </Translation>
     )
 }
 

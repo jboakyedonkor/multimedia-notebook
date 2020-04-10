@@ -9,7 +9,8 @@ import { ListItem, Icon } from 'react-native-elements';
 
 import * as notesActions from '../store/actions/notes';
 
-
+import { Translation } from 'react-i18next';
+import i18n from "../i18n.js";
 
 
 
@@ -107,16 +108,19 @@ const FavoritesScreen = props => {
 
     if (favoriteNotes.length === 0) {
         return (
+            <Translation>
+            {(t, {i18n}) =>
             <View
                 style={{ flex: 1, justifyContent: "center", alignItems: 'center' }}>
-                <Text>You currently do not have any favorite notes!</Text>
-                <Text>Tap on star icon to add note to favorites</Text>
+                <Text>{t("You currently do not have any favorite notes!")}</Text>
+                <Text>{t("Tap on star icon to add note to favorites")}</Text>
             </View>
+            }
+            </Translation>
         )
     }
 
     return (
-
         <SafeAreaView style={styles.screen}>
 
             <SwipeListView
