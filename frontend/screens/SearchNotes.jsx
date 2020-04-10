@@ -1,67 +1,44 @@
-import React, {useState, useCallback, useEffect} from 'react';
-import { SafeAreaView, View, Text, StyleSheet, Alert } from 'react-native';
+import React, { useState } from 'react';
+import { SafeAreaView, View, Text, StyleSheet, ScrollView, FlatList } from 'react-native';
+import { SearchBar, ListItem, Icon } from 'react-native-elements';
 import { useDispatch, useSelector } from 'react-redux';
 
 
-
 import { SwipeListView } from 'react-native-swipe-list-view';
-import { ListItem, Icon } from 'react-native-elements';
 
 import * as notesActions from '../store/actions/notes';
 
 
 
-
-
-
-const FavoritesScreen = props => {
+const SearchScreen = props => {
 
     const dispatch = useDispatch();
-    const [isLoading, setIsLoading] = useState(false);
+    const searchedNotes = useSelector(state => state.notes.searchedNotes);
+    const [searchText, setSearchText] = useState('');
     const [error, setError] = useState();
-    const favoriteNotes = useSelector(state => state.notes.favoriteNotes);
 
+    const updateSearchField = searchTextField => {
+        setSearchText(searchTextField);
+        searchNotes(searchTextField);
+    }
 
-    fetchFavoriteNotes = useCallback(async () => {
-        try {
-            await dispatch(notesActions.fetchFavorites());
-        } catch (err) {
-            setError(err.message);
-            //throw new Error(err.message);
-            //Alert.alert("Could not load note")
+    const searchNotes = async (noteToFind) => {
 
-        }
+        await dispatch(notesActions.searchNotes(noteToFind))
 
-    }, [dispatch]);
-
-    //get favorite notes
-    useEffect(() => {
-        setIsLoading(true);
-        fetchFavoriteNotes();
-        setIsLoading(false);
-    }, [dispatch]);
-
+    }
 
     const deleteNote = async (noteTobeDeleted) => {
 
-        Alert.alert('Are you sure?', 'Do you really want to delete this item?', [
-            { text: 'No', style: 'default' },
-            {
-              text: 'Yes',
-              style: 'destructive',
-              onPress: async () => {
-                try {
-                    await dispatch(notesActions.deleteNote(noteTobeDeleted))
-        
-        
-                } catch (err) {
-                    console.log(err.message)
-                    setError(err.message)
-        
-                }
-              }
-            }
-          ]);
+        try {
+            await dispatch(notesActions.deleteNote(noteTobeDeleted))
+
+
+        } catch (err) {
+            console.log(err.message)
+            setError(err.message)
+
+        }
     }
 
     const renderHiddenItem = (itemData, itemMap) => (
@@ -96,31 +73,21 @@ const FavoritesScreen = props => {
         
     }
 
-    //spinner display during network request
-    if (isLoading) {
-        return (
-            <View style={styles.centered}>
-                <ActivityIndicator size="large" color={'#DA4633'} />
-            </View>
-        );
-    }
-
-    if (favoriteNotes.length === 0) {
-        return (
-            <View
-                style={{ flex: 1, justifyContent: "center", alignItems: 'center' }}>
-                <Text>You currently do not have any favorite notes!</Text>
-                <Text>Tap on star icon to add note to favorites</Text>
-            </View>
-        )
-    }
 
     return (
 
         <SafeAreaView style={styles.screen}>
-
+            <SearchBar
+                platform={Platform.OS === 'android' ? 'android' : 'ios'}
+                placeholder="Enter title of note"
+                onChangeText={updateSearchField}
+                value={searchText}
+                lightTheme
+                round
+                placeholderTextColor='black'
+            />
             <SwipeListView
-                data={favoriteNotes}
+                data={searchedNotes}
                 keyExtractor={(item, index) => index.toString()}
                 renderItem={({ item }) => (
 
@@ -135,8 +102,7 @@ const FavoritesScreen = props => {
                             name={item.favorite ? 'ios-star' : 'ios-star-outline'}
                             type='ionicon'
                             color='#DA4633'
-                        onPress={() => updateFavorite(item)} 
-                        />}
+                            onPress={() => updateFavorite(item)} />}
                     />
 
                 )}
@@ -154,7 +120,6 @@ const FavoritesScreen = props => {
             */
 
             />
-
         </SafeAreaView>
     )
 }
@@ -164,8 +129,12 @@ const styles = StyleSheet.create({
     screen: {
         height: '100%',
         width: '100%',
-    },
 
+    },
+    scrollView: {
+        flex: 1,
+        borderWidth: 1
+    },
     rowBack: {
         alignItems: 'center',
         backgroundColor: 'red',
@@ -191,4 +160,4 @@ const styles = StyleSheet.create({
     },
 })
 
-export default FavoritesScreen;
+export default SearchScreen;

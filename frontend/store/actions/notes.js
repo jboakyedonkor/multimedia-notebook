@@ -44,7 +44,7 @@ export const createNote = (name, text, video_link, audio_link, tags = []) => {
       const resData = await response.json();
 
       //print response from API
-      console.log(resData)
+      //console.log(resData)
 
 
       dispatch({
@@ -90,11 +90,11 @@ export const deleteNote = (name) => {
       );
 
       if (!response.ok) {
-        throw new Error('Could not find notes. Something wrong with the server!');
+        throw new Error('Could not delete note. Something wrong with the server!');
       }
 
       const resData = await response.json()
-      console.log(resData)
+      //console.log(resData)
 
 
       dispatch({ type: DELETE_NOTE, name });
@@ -138,7 +138,7 @@ export const updateNote = (name, text, video_link, audio_link, favorite) => {
       const resData = await response.json();
 
       //print response from API
-      console.log(resData)
+      //console.log(resData)
 
       dispatch({
         type: UPDATE_NOTE,
