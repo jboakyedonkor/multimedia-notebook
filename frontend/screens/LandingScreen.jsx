@@ -25,6 +25,7 @@ const LandingScreen = props => {
 
     const dispatch = useDispatch();
     const [isLoading, setIsLoading] = useState(false);
+    const [isRefreshing, setIsRefreshing] = useState(false);
     const [error, setError] = useState();
     const popularTags = useSelector(state => state.tags.popularTags);
 
@@ -64,6 +65,8 @@ const LandingScreen = props => {
     */
 
     fetchData = useCallback(async () => {
+        setError(null)
+        setIsRefreshing(true)
         try {
             await dispatch(tagsActions.fetchPopularTags());
             await dispatch(userActions.getUserInfo());
@@ -74,6 +77,7 @@ const LandingScreen = props => {
             //Alert.alert("Could not load note")
 
         }
+        setIsRefreshing(false)
 
     }, [dispatch]);
 
@@ -158,15 +162,17 @@ const LandingScreen = props => {
         <View style={styles.screen}>
             <SwipeListView
                 
+                onRefresh = {fetchData}
+                refreshing = {isRefreshing}
                 ListHeaderComponent={<Text h4>Popular Tags</Text>}
                 data={popularTags}
                 keyExtractor={(item, index) => index.toString()}
-                //refreshing
                 renderItem={({ item }) => (
 
                     //<Text>{item.name}</Text>
 
                     <ListItem
+                        //onPress = {()}
                         title={item.name}
                         subtitle={<Text style={{ fontStyle: 'italic' }}>{"created: " + item.created_at.substring(0, 10).replace(/-/g, '/')}</Text>}
                         bottomDivider

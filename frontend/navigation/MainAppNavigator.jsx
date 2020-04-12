@@ -18,6 +18,7 @@ import FavoritesScreen from '../screens/FavoritesScreen';
 import SearchScreen from '../screens/SearchScreen';
 import StartupScreen from '../screens/StartupScreen';
 import BlankNoteScreen from '../screens/BlankNoteScreen';
+import EditNoteScreen from '../screens/EditNoteScreen';
 
 
 const LandingPageStackNavigator = createStackNavigator();
@@ -70,6 +71,27 @@ export const FavoritesNavigator = () => {
     )
 }
 
+const SearchStackNavigator = createStackNavigator();
+export const SearchNavigator = () => {
+
+    return(
+        <SearchStackNavigator.Navigator>
+            <SearchStackNavigator.Screen
+                name = 'Search'
+                component = {SearchScreen}
+                options = {{headerTitle: 'Search'}}
+            />
+
+            <SearchStackNavigator.Screen
+                name = 'EditNoteScreen'
+                component = {EditNoteScreen}
+                options = {{headerTitle: ''}}
+            />
+
+        </SearchStackNavigator.Navigator>
+    )
+}
+
 const LoggedInTabNavigator = createBottomTabNavigator();
 const LoggedInNavigator = () => {
     return (
@@ -101,7 +123,7 @@ const LoggedInNavigator = () => {
             />
             <LoggedInTabNavigator.Screen
                 name='Search'
-                component={SearchScreen}
+                component={SearchNavigator}
                 options={{
                     tabBarLabel: 'Search',
                     tabBarIcon: ({ color, size }) => {

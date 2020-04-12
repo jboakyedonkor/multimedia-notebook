@@ -9,11 +9,12 @@ export const UPDATE_NOTE = 'UPDATE_NOTE';
 export const DELETE_NOTE = 'DELETE_NOTE';
 export const ADD_TO_FAVORITE = 'ADD_TO_FAVORITE'
 export const REMOVE_FROM_FAVORITE = 'REMOVE_FROM_FAVORITE'
+export const UPDATE_NOTE_WITH_NEW_TITLE = 'UPDATE_NOTE_WITH_NEW_TITLE'
 
 export const BASE_URL = 'mn-api-ajvco6nb4a-uk.a.run.app';
 
 
-export const createNote = (name, text, video_link, audio_link, tags = []) => {
+export const createNote = (name, text, video_link = "", audio_link, tags = []) => {
   return async (dispatch, getState) => {
     // any async code you want!
     const token = getState().auth.token;
@@ -36,15 +37,17 @@ export const createNote = (name, text, video_link, audio_link, tags = []) => {
           })
         }
       );
-
+/*
       if (!response.ok) {
+        //console.log(response)
         throw new Error('Could not save note. Try again');
       }
+      */
 
       const resData = await response.json();
 
       //print response from API
-      //console.log(resData)
+      console.log(resData)
 
 
       dispatch({
@@ -138,11 +141,63 @@ export const updateNote = (name, text, video_link, audio_link, favorite) => {
       const resData = await response.json();
 
       //print response from API
-      //console.log(resData)
+      console.log(resData)
 
       dispatch({
         type: UPDATE_NOTE,
         noteData: {
+          name: resData.name,
+          text: resData.text,
+          favorite: resData.favorite,
+          video_link: resData.video_link,
+          audio_link: resData.audio_link,
+          created_at: resData.created_at,
+          accessed_at: resData.accessed_at
+        }
+      });
+
+    } catch (err) {
+      console.log("server not okay")
+      throw new Error(err.message);
+    }
+  };
+};
+
+export const updateNoteWithNewTitle = (current_name, new_name, text, video_link, audio_link, add_tags) => {
+  return async (dispatch, getState) => {
+    // any async code you want!
+    const token = getState().auth.token;
+
+    try {
+      const response = await fetch(
+        `https://${BASE_URL}/api/update-note`,
+        {
+          method: 'POST',
+          headers: {
+            'Authorization': token,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            current_name,
+            new_name,
+            text,
+            add_tags,
+            video_link,
+            audio_link
+          })
+        }
+      );
+
+
+      const resData = await response.json();
+
+      //print response from API
+      console.log(resData)
+
+      dispatch({
+        type: UPDATE_NOTE_WITH_NEW_TITLE,
+        noteData: {
+          old_name: current_name,
           name: resData.name,
           text: resData.text,
           favorite: resData.favorite,

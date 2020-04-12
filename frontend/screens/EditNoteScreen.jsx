@@ -13,7 +13,7 @@ import {
     Image
 } from 'react-native';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import * as ImagePicker from 'expo-image-picker';
 import * as Permissions from 'expo-permissions';
 
@@ -32,13 +32,24 @@ import { Dialog } from 'react-native-simple-dialogs';
 import { Ionicons, MaterialCommunityIcons, EvilIcons } from '@expo/vector-icons';
 
 let tagArr = [];
-const BlankNoteScreen = props => {
+const EditNoteScreen = props => {
 
     const dispatch = useDispatch();
 
-    const [title, setTitle] = useState("")
-    const [body, setBody] = useState("")
-    const [pickedImage, setPickedImage] = useState();
+    const noteName = props.route.params ? props.route.params.noteName : null;
+
+    
+
+    const editedNote = useSelector(state =>
+        state.notes.allNotes.find(note => note.name === noteName)
+    );
+
+    console.log(editedNote.name);
+
+    const [currentTitle, setCurrentTitle] = useState(editedNote.name)
+    const [title, setTitle] = useState(editedNote.name)
+    const [body, setBody] = useState(editedNote.text)
+    const [pickedImage, setPickedImage] = useState(editedNote.video_link);
 
     const [titleIsInvalid, setTitleIsInvalid] = useState(true)
     const [bodyIsInvalid, setBodyIsInvalid] = useState(true)
@@ -46,9 +57,7 @@ const BlankNoteScreen = props => {
     const [isImageDialogVisible, setIsImageDialogVisible] = useState(false);
     const [error, setError] = useState();
 
-
-
-
+    
 
     const verifyPermissions = async () => {
         const result = await Permissions.askAsync(
@@ -92,6 +101,7 @@ const BlankNoteScreen = props => {
             setTitleIsInvalid(true)
         }
     }
+
     const bodyChangeHandler = (text) => {
         setBody(text)
         if (text.trim().length != 0) {
@@ -103,22 +113,32 @@ const BlankNoteScreen = props => {
 
 
     const submitHandler = useCallback(async () => {
+
+        /*
         if (titleIsInvalid || bodyIsInvalid) {
             Alert.alert('Empty input!', 'Please enter text in the form.', [
                 { text: 'Okay' }
             ]);
             return;
         }
+        */
         setError(null);
         setIsLoading(true);
 
         try {
-            await dispatch(notesActions.createNote(
+
+            console.log(currentTitle)
+            console.log(title)
+            console.log(body)
+            
+            await dispatch(notesActions.updateNoteWithNewTitle(
+                currentTitle,
                 title,
                 body,
                 pickedImage,
                 "https://www.googleapis.com/youtube/v3",
-                tagArr
+                tagArr,
+
             )
             );
             tagArr = []
@@ -146,7 +166,7 @@ const BlankNoteScreen = props => {
                         iconName={
                             Platform.OS === 'android' ? 'ios-mic' : 'ios-mic'
                         }
-                    //onPress={displayTagDialog}
+                        //onPress={displayTagDialog}
                     />
                     <Item
                         title="Save"
@@ -159,7 +179,6 @@ const BlankNoteScreen = props => {
             )
         });
     }, [submitHandler]);
-
 
 
     //spinner display during network request
@@ -204,7 +223,6 @@ const BlankNoteScreen = props => {
                         )
                 }
             </View>
-
             <Text>Tags:</Text>
             <Tags
                 initialText=""
@@ -246,6 +264,7 @@ const BlankNoteScreen = props => {
                 <View style={styles.blankNoteContainer}>
                     <View style={styles.titleViewContainer}>
                         <TextInput
+                            value = {title}
                             style={styles.title}
                             maxLength={20}
                             placeholder={'Title'}
@@ -255,6 +274,7 @@ const BlankNoteScreen = props => {
                     </View>
                     <View style={styles.textViewContainer}>
                         <TextInput
+                            value = {body}
                             style={styles.text}
                             multiline={true}
                             placeholder={'Start writing'}
@@ -358,4 +378,4 @@ const styles = new StyleSheet.create({
 });
 
 
-export default BlankNoteScreen;
+export default EditNoteScreen;

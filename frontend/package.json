@@ -30,7 +30,11 @@
     "react-navigation-header-buttons": "^3.0.5",
     "react-redux": "^7.2.0",
     "redux": "^4.0.5",
-    "redux-thunk": "^2.3.0"
+    "redux-thunk": "^2.3.0",
+    "expo-image-picker": "~8.0.1",
+    "expo-permissions": "~8.0.0",
+    "expo-file-system": "~8.0.0",
+    "expo-sqlite": "~8.0.0"
   },
   "devDependencies": {
     "babel-preset-expo": "^8.0.0",
