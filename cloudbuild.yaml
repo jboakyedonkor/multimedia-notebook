@@ -32,6 +32,8 @@ steps:
     - 'EMAIL_PORT_G=${_EMAIL_PORT}'
     - '--build-arg'
     - 'GOOG_HOST_G=${_GOOG_HOST}'
+    - '--build-arg'
+    - 'ADMIN_URL_G=${_ADMIN_URL}'
     - './backend'
   
   # === push ===
