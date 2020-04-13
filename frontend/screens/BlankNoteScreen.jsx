@@ -30,6 +30,8 @@ import * as notesActions from '../store/actions/notes';
 import NewNoteOverlayDisplay from '../components/NewNoteOverlayDisplay';
 import { Dialog } from 'react-native-simple-dialogs';
 import { Ionicons, MaterialCommunityIcons, EvilIcons } from '@expo/vector-icons';
+import { Translation } from 'react-i18next';
+import i18n from "../i18n.js";
 
 let tagArr = [];
 const BlankNoteScreen = props => {
@@ -173,10 +175,12 @@ const BlankNoteScreen = props => {
 
 
     return (
+        <Translation>
+        {(t, {i18n}) =>
         <View style={styles.screen}>
             <Dialog
                 visible={isImageDialogVisible}
-                title="Image preview"
+                title={t("Image preview")}
                 onTouchOutside={() => setIsImageDialogVisible(false)} >
                 <View style={styles.imagePicker}>
                     <View style={styles.imagePreview}>
@@ -205,11 +209,11 @@ const BlankNoteScreen = props => {
                 }
             </View>
 
-            <Text>Tags:</Text>
+            <Text>{t('Tags') + ':'}</Text>
             <Tags
                 initialText=""
                 textInputProps={{
-                    placeholder: "Type in tag and space to enter, tap on tag to remove",
+                    placeholder: t('Type in tag and space to enter, tap on tag to remove'),
                     placeholderTextColor: 'black'
                 }}
                 initialTags={tagArr}
@@ -248,23 +252,16 @@ const BlankNoteScreen = props => {
                         <TextInput
                             style={styles.title}
                             maxLength={20}
-                            placeholder={'Title'}
+                            placeholder={t('Title')}
                             onChangeText={titleChangeHandler}
-                            returnKeyType='next'
-                        />
-                    </View>
-                    <View style={styles.textViewContainer}>
-                        <TextInput
-                            style={styles.text}
-                            multiline={true}
-                            placeholder={'Start writing'}
-                            onChangeText={bodyChangeHandler}
                             returnKeyType='next'
                         />
                     </View>
                 </View>
             </ScrollView>
-        </View >
+            </View >
+        }
+        </Translation>
 
     )
 

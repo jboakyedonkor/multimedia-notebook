@@ -8,6 +8,8 @@ import { SwipeListView } from 'react-native-swipe-list-view';
 
 import * as notesActions from '../store/actions/notes';
 
+import { Translation } from 'react-i18next';
+import i18n from "../i18n.js";
 
 
 const SearchScreen = props => {
@@ -54,7 +56,8 @@ const SearchScreen = props => {
     }
 
     const renderHiddenItem = (itemData, itemMap) => (
-
+        <Translation>
+        {(t, {i18n}) =>
         <View style={styles.rowBack}>
             <View style={[styles.backRightBtn, styles.backRightBtnRight]}>
                 <Text
@@ -67,7 +70,8 @@ const SearchScreen = props => {
                     Delete</Text>
             </View>
         </View>
-
+        }
+        </Translation>
     )
 
     const updateFavorite = async ({ name, text, favorite, video_link, audio_link, created_at, accessed_at }) => {
@@ -90,11 +94,12 @@ const SearchScreen = props => {
 
 
     return (
-
+        <Translation>
+        {(t, {i18n}) =>
         <SafeAreaView style={styles.screen}>
             <SearchBar
                 platform={Platform.OS === 'android' ? 'android' : 'ios'}
-                placeholder="Enter title of note"
+                placeholder={t("Enter title of note")}
                 onChangeText={updateSearchField}
                 value={searchText}
                 lightTheme
@@ -137,6 +142,8 @@ const SearchScreen = props => {
 
             />
         </SafeAreaView>
+        }
+        </Translation>
     )
 }
 

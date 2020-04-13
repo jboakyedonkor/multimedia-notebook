@@ -19,6 +19,8 @@ import HeaderButton from '../components/HeaderButton';
 import { FlatList } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { Translation } from 'react-i18next';
+import i18n from "../i18n.js";
 
 
 const LandingScreen = props => {
@@ -100,10 +102,14 @@ const LandingScreen = props => {
 
     if (popularTags.length === 0) {
         return (
+            <Translation>
+            {(t, {i18n}) =>
             <View
                 style={{ flex: 1, justifyContent: "center", alignItems: 'center' }}>
-                <Text>You currently do not have any popular tags</Text>
+                <Text>{t("You currently do not have any popular tags")}</Text>
             </View>
+            }
+            </Translation>
         )
     }
 

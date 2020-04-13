@@ -19,6 +19,9 @@ import Input from '../components/Input';
 import CustomButton from '../components/CustomButton';
 import * as authActions from '../store/actions/auth';
 
+import { Translation } from 'react-i18next';
+import i18n from "../i18n.js";
+
 
 
 const SignUpScreen = props => {
@@ -53,72 +56,84 @@ const SignUpScreen = props => {
     }
 
     return (
-        <ScrollView>
-            <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-                <View style={styles.screen}>
-                    <View style={styles.container}>
-                        <Text style={styles.largeText}>Create Profile</Text>
-                        <Text style={styles.smallText}>Please enter your basic information and set up a new password for secure login</Text>
-
-                        <Input
-                            placeholder={'Email'}
-                            style={styles.input}
-                            textContentType={'emailAddress'}
-                            value={email}
-                            onChangeText={text => setEmail(text)}
-                        />
-                        <Input
-                            placeholder={'First name'}
-                            style={styles.input}
-                            textContentType={'name'}
-                            value={firstname}
-                            onChangeText={text => setFirstname(text)}
-                        />
-                        <Input
-                            placeholder={'Last name'}
-                            style={styles.input}
-                            textContentType={'name'}
-                            value={lastname}
-                            onChangeText={text => setLastname(text)}
-                        />
-                        <Input
-                            placeholder={'Username'}
-                            style={styles.input}
-                            textContentType={'username'}
-                            value={username}
-                            onChangeText={text => setUsername(text)}
-                        />
-                        <Input
-                            placeholder={'password'}
-                            style={styles.input}
-                            textContentType={'password'}
-                            secureTextEntry={true}
-                            value={password}
-                            onChangeText={text => setPassword(text)}
-                        />
-                        <Input
-                            placeholder={'confirm password'}
-                            style={styles.input}
-                            textContentType={'password'}
-                            secureTextEntry={true}
-                            value={confirmPassword}
-                            onChangeText={text => setConfirmPassword(text)}
-                        />
-                        <View style={styles.buttonContainer}>
-                            {isLoading ? (
-                                <ActivityIndicator size='small' color={'#DA4633'} />
-                            ) : (
-                                    <CustomButton
-                                        style={{ backgroundColor: '#DA4633' }}
-                                        title='submit'
-                                        color={'black'}
-                                        onPress={signUpHandler}
-                                    />)}
+        <Translation>
+        {(t, {i18n}) =>
+                <ScrollView>
+                    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+                        <View style={styles.screen}>
+                            <View style={styles.container}>
+                                <Text style={styles.largeText}>{t('Create Profile')}</Text>
+                                <Text style={styles.smallText}>{t('CreateProfilePrompt')}</Text>
+                                
+                                <Input
+                                    placeholder={t('Email')}
+                                    style={styles.input}
+                                    textContentType={'emailAddress'}
+                                    value={email}
+                                    onChangeText={text => setEmail(text)}
+                                />
+                                
+                                <Input
+                                    placeholder={t('First name')}
+                                    style={styles.input}
+                                    textContentType={'name'}
+                                    value={firstname}
+                                    onChangeText={text => setFirstname(text)}
+                                />
+                                
+                                <Input
+                                    placeholder={t('Last name')}
+                                    style={styles.input}
+                                    textContentType={'name'}
+                                    value={lastname}
+                                    onChangeText={text => setLastname(text)}
+                                />
+                                
+                                <Input
+                                    placeholder={t('Username')}
+                                    style={styles.input}
+                                    textContentType={'username'}
+                                    value={username}
+                                    onChangeText={text => setUsername(text)}
+                                />
+                                
+                                <Input
+                                    placeholder={t('Password')}
+                                    style={styles.input}
+                                    textContentType={'password'}
+                                    secureTextEntry={true}
+                                    value={password}
+                                    onChangeText={text => setPassword(text)}
+                                />
+                                
+                                <Input
+                                    placeholder={t('Confirm password')}
+                                    style={styles.input}
+                                    textContentType={'password'}
+                                    secureTextEntry={true}
+                                    value={confirmPassword}
+                                    onChangeText={text => setConfirmPassword(text)}
+                                />
+                                
+                                <View style={styles.buttonContainer}>
+                                    {isLoading ? (
+                                        <ActivityIndicator size='small' color={'#DA4633'} />
+                                    ) : (
+                                        <CustomButton
+                                            style={{ backgroundColor: '#DA4633' }}
+                                            title={t('Submit')}
+                                            color={'black'}
+                                            onPress={signUpHandler}
+                                        />
+                                        )}
+                                </View>
+                            </View>
                         </View>
-                    </View>
-                </View>
-            </TouchableWithoutFeedback>
-        </ScrollView>
+                    </TouchableWithoutFeedback>
+                </ScrollView>
+        }
+        </Translation>
+        
     )
 }
 
