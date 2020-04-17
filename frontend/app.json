@@ -24,7 +24,13 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.mn.multimedianotebok",
+      "buildNumber":"1.0.0"
+    },
+    "android":{
+        "package" : "com.mn.multimedianotebok",
+        "versionCode": 1
     }
   }
 }
