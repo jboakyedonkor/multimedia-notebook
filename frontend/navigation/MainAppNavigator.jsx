@@ -145,7 +145,7 @@ const LoggedInNavigator = () => {
                 />
                 <LoggedInTabNavigator.Screen
                     name='Search'
-                    component={SearchScreen}
+                    component={SearchNavigator}
                     options={{
                         tabBarLabel: t('Search'),
                         tabBarIcon: ({ color, size }) => {

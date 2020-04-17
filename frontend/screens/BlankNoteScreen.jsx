@@ -257,6 +257,15 @@ const BlankNoteScreen = props => {
                             returnKeyType='next'
                         />
                     </View>
+                    <View style={styles.textViewContainer}>
+                        <TextInput
+                            style={styles.text}
+                            multiline={true}
+                            placeholder={t('Start writing')}
+                            onChangeText={bodyChangeHandler}
+                            returnKeyType='next'
+                        />
+                    </View>
                 </View>
             </ScrollView>
             </View >
