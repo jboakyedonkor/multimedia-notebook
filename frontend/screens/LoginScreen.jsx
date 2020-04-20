@@ -1,15 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, Text, ActivityIndicator, Dimensions, Alert } from 'react-native';
+import { View, StyleSheet, Text, ActivityIndicator, Button, Dimensions, Alert, KeyboardAvoidingView} from 'react-native';
 import { useDispatch } from 'react-redux';
+import { Dialog } from 'react-native-simple-dialogs';
 
 
 import Input from '../components/Input';
 import CustomButton from '../components/CustomButton';
 import * as authActions from '../store/actions/auth';
 import { ScrollView } from 'react-native-gesture-handler';
+import * as userActions from '../store/actions/user';
 
 import { Translation } from 'react-i18next';
 import i18n from "../i18n.js";
+
 
 
 const LoginScreen = props => {
@@ -17,6 +20,8 @@ const LoginScreen = props => {
     const [password, setPassword] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState();
+    const [isDialogVisible, setIsDialogVisible] = useState(false)
+    const [resetEmail, setResetEmail] = useState("");
 
 
     const dispatch = useDispatch();
@@ -39,6 +44,20 @@ const LoginScreen = props => {
         }
     }
 
+    const showForgotPasswordDialog = () => {
+        setIsDialogVisible(true)
+    }
+
+    const resetLink = async () => {
+
+        try {
+            await dispatch(userActions.resetLink(resetEmail));
+        } catch (err){
+            setError(err.message)
+        }
+
+    }
+
     //to show two way binding between text input and state values
     //console.log(email);
     //console.log(password);
@@ -46,6 +65,24 @@ const LoginScreen = props => {
         <Translation>
         {(t, {i18n}) =>
             <ScrollView>
+            <Dialog
+                            visible={isDialogVisible}
+                            title={t("Account Reset")}
+                            onTouchOutside={() => setIsDialogVisible(false)} >
+                            <KeyboardAvoidingView>
+                                    <Input
+                                        placeholder={t('enter email')}
+                                        style={styles.input}
+                                        textContentType={'text'}
+                                        value={resetEmail}
+                                        onChangeText={text => setResetEmail(text)}
+                                    />
+                                    <Button
+                                        title="Submit"
+                                        onPress = {resetLink}
+                                    />
+                            </KeyboardAvoidingView>
+                        </Dialog>
                 <View style={styles.screen}>
                     <View style={styles.textContainer}>
                         <Text style={styles.text}>{t('Log in or sign up for free!')}</Text>
@@ -77,6 +114,10 @@ const LoginScreen = props => {
                                     onPress={LoginHandler}
                                 />
                             )}
+                        <Button 
+                            title = "Forgot password"
+                            onPress = {showForgotPasswordDialog}
+                        />
                     </View>
                 </View>
             </ScrollView>

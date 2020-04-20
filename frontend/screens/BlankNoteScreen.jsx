@@ -19,6 +19,7 @@ import * as Permissions from 'expo-permissions';
 
 
 
+
 import HeaderButton from '../components/HeaderButton';
 import { Input, Icon } from 'react-native-elements';
 import { Chip } from 'react-native-paper';
@@ -61,6 +62,21 @@ const BlankNoteScreen = props => {
             Alert.alert(
                 'Insufficient permissions!',
                 'You need to grant camera permissions to use this app.Go to settings to change permissions.',
+                [{ text: 'Okay' }]
+            );
+            return false;
+        }
+        return true;
+    };
+
+    const verifyAudioPermissions = async () => {
+        const result = await Permissions.askAsync(
+            Permissions.AUDIO_RECORDING
+        );
+        if (result.status !== 'granted') {
+            Alert.alert(
+                'Insufficient permissions!',
+                'You need to grant microphone permissions to use this app.Go to settings to change permissions.',
                 [{ text: 'Okay' }]
             );
             return false;
@@ -132,6 +148,21 @@ const BlankNoteScreen = props => {
         setIsLoading(false);
     }, [dispatch, titleIsInvalid, bodyIsInvalid, title, body]);
 
+    const recordAudio = async() => {
+        const hasPermission = await verifyAudioPermissions();
+        if (!hasPermission) {
+            return;
+        }
+        RNVoiceRecorder.Record({
+            onDone: (path) => {
+                console.log(path)
+            },
+            onCancel: () => {
+                console.log("CANCELLED!!")
+            }
+        })
+    }
+
     useEffect(() => {
         props.navigation.setOptions({
             headerRight: () => (
@@ -148,7 +179,7 @@ const BlankNoteScreen = props => {
                         iconName={
                             Platform.OS === 'android' ? 'ios-mic' : 'ios-mic'
                         }
-                    //onPress={displayTagDialog}
+                        onPress={recordAudio}
                     />
                     <Item
                         title="Save"

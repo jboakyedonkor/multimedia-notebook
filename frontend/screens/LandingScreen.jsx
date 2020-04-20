@@ -30,6 +30,7 @@ const LandingScreen = props => {
     const [isRefreshing, setIsRefreshing] = useState(false);
     const [error, setError] = useState();
     const popularTags = useSelector(state => state.tags.popularTags);
+    const recentNotes = useSelector(state => state.notes.allNotes);
 
     createNewNoteHandler = useCallback(() => {
         props.navigation.navigate({ name: 'BlankScreen' });
@@ -66,7 +67,7 @@ const LandingScreen = props => {
     }, [dispatch]);
     */
 
-    fetchData = useCallback(async () => {
+    const fetchData = useCallback(async () => {
         setError(null)
         setIsRefreshing(true)
         try {
@@ -100,15 +101,15 @@ const LandingScreen = props => {
         );
     }
 
-    if (popularTags.length === 0) {
+    if (popularTags.length === 0 && recentNotes.length === 0) {
         return (
             <Translation>
-            {(t, {i18n}) =>
-            <View
-                style={{ flex: 1, justifyContent: "center", alignItems: 'center' }}>
-                <Text>{t("You currently do not have any popular tags")}</Text>
-            </View>
-            }
+                {(t, { i18n }) =>
+                    <View
+                        style={{ flex: 1, justifyContent: "center", alignItems: 'center' }}>
+                        <Text>{t("You currently do not have any popular tags and recent notes")}</Text>
+                    </View>
+                }
             </Translation>
         )
     }
@@ -163,22 +164,147 @@ const LandingScreen = props => {
 
     }
 
+    const deleteNote = async (noteTobeDeleted) => {
+
+        Alert.alert('Are you sure?', 'Do you really want to delete this item?', [
+            { text: 'No', style: 'default' },
+            {
+                text: 'Yes',
+                style: 'destructive',
+                onPress: async () => {
+                    try {
+                        await dispatch(notesActions.deleteNote(noteTobeDeleted))
+
+
+                    } catch (err) {
+                        console.log(err.message)
+                        setError(err.message)
+
+                    }
+                }
+            }
+        ]);
+    }
+
+    const renderHiddenNoteItem = (itemData, itemMap) => (
+        <Translation>
+            {(t, { i18n }) =>
+                <View style={styles.rowBack}>
+                    <View style={[styles.backRightBtn, styles.backRightBtnRight]}>
+                        <Text
+                            style={styles.backTextWhite}
+                            onPress={() => {
+                                itemMap[itemData.index].closeRow()
+                                deleteNote(itemData.item.name)
+                            }}
+                        >
+                            Delete</Text>
+                    </View>
+                </View>
+            }
+        </Translation>
+    )
+
+    const updateNoteFavorite = async ({ name, text, favorite, video_link, audio_link, created_at, accessed_at }) => {
+
+        try {
+            //update favorite's array in store
+            await dispatch(notesActions.updateFavorites(name, text, favorite, video_link, audio_link, created_at, accessed_at));
+            //update database and all store
+            await dispatch(notesActions.updateNote(name, text, video_link, audio_link, !favorite));
+
+        } catch (err) {
+            console.log(err.message);
+            return;
+        }
+
+    }
+
+    const editNoteHandler = name => {
+        props.navigation.navigate('EditNoteScreen', { noteName: name });
+    };
+
 
     return (
         <View style={styles.screen}>
+            {popularTags.length != 0 ? (
+                <SwipeListView
+
+                    onRefresh={fetchData}
+                    refreshing={isRefreshing}
+                    ListHeaderComponent={<Text h4>Popular Tags</Text>}
+                    data={popularTags}
+                    keyExtractor={(item, index) => index.toString()}
+                    renderItem={({ item }) => (
+
+                        //<Text>{item.name}</Text>
+
+                        <ListItem
+                            //onPress = {()}
+                            title={item.name}
+                            subtitle={<Text style={{ fontStyle: 'italic' }}>{"created: " + item.created_at.substring(0, 10).replace(/-/g, '/')}</Text>}
+                            bottomDivider
+                            chevron
+                            rightIcon={<Icon
+                                name={item.favorite ? 'ios-star' : 'ios-star-outline'}
+                                type='ionicon'
+                                color='#DA4633'
+                                onPress={() => updateFavorite(item)}
+
+                            />}
+                            leftIcon={<Icon
+                                reverse
+                                raised
+                                name={item.favorite ? 'hashtag' : 'hashtag'}
+                                type='font-awesome'
+                                color='#DA4633'
+                            //onPress={() => updateFavorite(item)} 
+
+                            />}
+                        />
+
+                    )}
+                    renderHiddenItem={renderHiddenItem}
+                    leftOpenValue={75}
+                    rightOpenValue={0}
+                /*
+                onRowOpen = {(itemKey, itemMap) => {
+                    console.log("--------------------------------------------------------------")
+                    console.log(itemMap)
+                    setTimeout(() => {
+                        itemMap[itemKey].closeRow()
+                    }, 3000)
+                }}
+                */
+
+                />) : (
+
+                    <Translation>
+                        {(t, { i18n }) =>
+                            <View style = {{flex: 1}}>
+                                <Text h4>Popular Tags</Text>
+                                <View
+                                    style={{ flex: 1, justifyContent: "center", alignItems: 'center' }}>
+                                    <Text>{t("You currently do not have any popular tags")}</Text>
+                                </View>
+                            </View>
+                        }
+                    </Translation>
+                )}
+            {recentNotes.length != 0 ? (
             <SwipeListView
-                
-                onRefresh = {fetchData}
-                refreshing = {isRefreshing}
-                ListHeaderComponent={<Text h4>Popular Tags</Text>}
-                data={popularTags}
+
+                onRefresh={fetchData}
+                refreshing={isRefreshing}
+                ListHeaderComponent={<Text h4>Recent Notes</Text>}
+                data={recentNotes}
                 keyExtractor={(item, index) => index.toString()}
                 renderItem={({ item }) => (
 
                     //<Text>{item.name}</Text>
 
                     <ListItem
-                        //onPress = {()}
+                        onPress={() => editNoteHandler(item.name)}
                         title={item.name}
                         subtitle={<Text style={{ fontStyle: 'italic' }}>{"created: " + item.created_at.substring(0, 10).replace(/-/g, '/')}</Text>}
                         bottomDivider
@@ -187,7 +313,7 @@ const LandingScreen = props => {
                             name={item.favorite ? 'ios-star' : 'ios-star-outline'}
                             type='ionicon'
                             color='#DA4633'
-                            onPress={() => updateFavorite(item)}
+                            onPress={() => updateNoteFavorite(item)}
 
                         />}
                         leftIcon={<Icon
@@ -202,7 +328,7 @@ const LandingScreen = props => {
                     />
 
                 )}
-                renderHiddenItem={renderHiddenItem}
+                renderHiddenItem={renderHiddenNoteItem}
                 leftOpenValue={75}
                 rightOpenValue={0}
             /*
@@ -215,7 +341,20 @@ const LandingScreen = props => {
             }}
             */
 
-            />
+            />):(
+                    <Translation>
+                        {(t, { i18n }) =>
+                            <View style = {{flex: 1}}>
+                                <Text h4>Recent Notes</Text>
+                                <View
+                                    style={{ flex: 1, justifyContent: "center", alignItems: 'center' }}>
+                                    <Text>{t("You currently do not have any recent notes")}</Text>
+                                </View>
+                            </View>
+                        }
+                    </Translation>
+
+            )}
         </View>
     )
 }

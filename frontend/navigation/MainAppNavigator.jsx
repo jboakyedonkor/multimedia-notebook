@@ -29,45 +29,51 @@ const LandingPageStackNavigator = createStackNavigator();
 export const LandingPageNavigator = () => {
     return (
         <Translation>
-        {(t, {i18n}) =>
-            <LandingPageStackNavigator.Navigator
-            mode = 'modal'
-            >
-                <LandingPageStackNavigator.Screen
-                    name='Landing'
-                    component={LandingScreen}
-                    options={{ headerTitle: t('Home') }}
-                />
+            {(t, { i18n }) =>
+                <LandingPageStackNavigator.Navigator
+                    mode='modal'
+                >
+                    <LandingPageStackNavigator.Screen
+                        name='Landing'
+                        component={LandingScreen}
+                        options={{ headerTitle: t('Home') }}
+                    />
 
-                <LandingPageStackNavigator.Screen
-                    name='BlankScreen'
-                    component={BlankNoteScreen}
-                    options={{ headerTitle: '' }}
-                />
-            </LandingPageStackNavigator.Navigator>
-        }
-        </Translation>  
+                    <LandingPageStackNavigator.Screen
+                        name='BlankScreen'
+                        component={BlankNoteScreen}
+                        options={{ headerTitle: '' }}
+                    />
+                    <LandingPageStackNavigator.Screen
+                        name='EditNoteScreen'
+                        component={EditNoteScreen}
+                        options={{ headerTitle: '' }}
+                    />
+
+                </LandingPageStackNavigator.Navigator>
+            }
+        </Translation>
     )
 }
 const UserDashboardStackNavigator = createStackNavigator();
 export const UserDashboardNavigator = () => {
 
-    return(
+    return (
         <Translation>
-        {(t, {i18n}) =>
-            <UserDashboardStackNavigator.Navigator>
-                <UserDashboardStackNavigator.Screen
-                    name = 'Dashboard'
-                    component = {UserDashboardScreen}
-                    options = {{headerTitle: ''}}
-                />
-                <UserDashboardStackNavigator.Screen
-                    name = 'ChangeLang'
-                    component = {ChangeLangScreen}
-                    options = {{headerTitle: t('Change language')}}
-                />
-            </UserDashboardStackNavigator.Navigator>
-        }
+            {(t, { i18n }) =>
+                <UserDashboardStackNavigator.Navigator>
+                    <UserDashboardStackNavigator.Screen
+                        name='Dashboard'
+                        component={UserDashboardScreen}
+                        options={{ headerTitle: '' }}
+                    />
+                    <UserDashboardStackNavigator.Screen
+                        name='ChangeLang'
+                        component={ChangeLangScreen}
+                        options={{ headerTitle: t('Change language') }}
+                    />
+                </UserDashboardStackNavigator.Navigator>
+            }
         </Translation>
     )
 }
@@ -75,18 +81,18 @@ export const UserDashboardNavigator = () => {
 const FavoritesStackNavigator = createStackNavigator();
 export const FavoritesNavigator = () => {
 
-    return(
+    return (
         <Translation>
-        {(t, {i18n}) =>
-            <FavoritesStackNavigator.Navigator>
-                <FavoritesStackNavigator.Screen
-                    name = 'Favorites'
-                    component = {FavoritesScreen}
-                    options = {{headerTitle: t('Favorites')}}
-                />
+            {(t, { i18n }) =>
+                <FavoritesStackNavigator.Navigator>
+                    <FavoritesStackNavigator.Screen
+                        name='Favorites'
+                        component={FavoritesScreen}
+                        options={{ headerTitle: t('Favorites') }}
+                    />
 
-            </FavoritesStackNavigator.Navigator>
-        }
+                </FavoritesStackNavigator.Navigator>
+            }
         </Translation>
     )
 }
@@ -94,18 +100,18 @@ export const FavoritesNavigator = () => {
 const SearchStackNavigator = createStackNavigator();
 export const SearchNavigator = () => {
 
-    return(
+    return (
         <SearchStackNavigator.Navigator>
             <SearchStackNavigator.Screen
-                name = 'Search'
-                component = {SearchScreen}
-                options = {{headerTitle: 'Search'}}
+                name='Search'
+                component={SearchScreen}
+                options={{ headerTitle: 'Search' }}
             />
 
             <SearchStackNavigator.Screen
-                name = 'EditNoteScreen'
-                component = {EditNoteScreen}
-                options = {{headerTitle: ''}}
+                name='EditNoteScreen'
+                component={EditNoteScreen}
+                options={{ headerTitle: '' }}
             />
 
         </SearchStackNavigator.Navigator>
@@ -116,55 +122,55 @@ const LoggedInTabNavigator = createBottomTabNavigator();
 const LoggedInNavigator = () => {
     return (
         <Translation>
-        {(t, {i18n}) =>
-            <LoggedInTabNavigator.Navigator
-                tabBarOptions={{
-                    activeTintColor: '#DA4633'
-                }}
-            >
-                <LoggedInTabNavigator.Screen
-                    name='LandingPage'
-                    component={LandingPageNavigator}
-                    options={{
-                        
-                        tabBarLabel: t('Home'),
-                        tabBarIcon: ({ color, size }) => {
-                            return <FontAwesome name='home' size={size} color={color} />
-                        }
+            {(t, { i18n }) =>
+                <LoggedInTabNavigator.Navigator
+                    tabBarOptions={{
+                        activeTintColor: '#DA4633'
                     }}
-                />
-                <LoggedInTabNavigator.Screen
-                    name='Favorites'
-                    component={FavoritesNavigator}
-                    options={{
-                        tabBarLabel: t('Favorites'),
-                        tabBarIcon: ({ color, size }) => {
-                            return <Ionicons name='ios-star' size={size} color={color} />
-                        }
-                    }}
-                />
-                <LoggedInTabNavigator.Screen
-                    name='Search'
-                    component={SearchNavigator}
-                    options={{
-                        tabBarLabel: t('Search'),
-                        tabBarIcon: ({ color, size }) => {
-                            return <Ionicons name='ios-search' size={size} color={color} />
-                        }
-                    }}
-                />
-                <LoggedInTabNavigator.Screen
-                    name='UserDashboardPage'
-                    component={UserDashboardNavigator}
-                    options={{
-                        tabBarLabel: t('Me'),
-                        tabBarIcon: ({ color, size }) => {
-                            return <Ionicons name='md-person' size={size} color={color} />
-                        }
-                    }}
-                />
-            </LoggedInTabNavigator.Navigator>
-        }
+                >
+                    <LoggedInTabNavigator.Screen
+                        name='LandingPage'
+                        component={LandingPageNavigator}
+                        options={{
+
+                            tabBarLabel: t('Home'),
+                            tabBarIcon: ({ color, size }) => {
+                                return <FontAwesome name='home' size={size} color={color} />
+                            }
+                        }}
+                    />
+                    <LoggedInTabNavigator.Screen
+                        name='Favorites'
+                        component={FavoritesNavigator}
+                        options={{
+                            tabBarLabel: t('Favorites'),
+                            tabBarIcon: ({ color, size }) => {
+                                return <Ionicons name='ios-star' size={size} color={color} />
+                            }
+                        }}
+                    />
+                    <LoggedInTabNavigator.Screen
+                        name='Search'
+                        component={SearchNavigator}
+                        options={{
+                            tabBarLabel: t('Search'),
+                            tabBarIcon: ({ color, size }) => {
+                                return <Ionicons name='ios-search' size={size} color={color} />
+                            }
+                        }}
+                    />
+                    <LoggedInTabNavigator.Screen
+                        name='UserDashboardPage'
+                        component={UserDashboardNavigator}
+                        options={{
+                            tabBarLabel: t('Me'),
+                            tabBarIcon: ({ color, size }) => {
+                                return <Ionicons name='md-person' size={size} color={color} />
+                            }
+                        }}
+                    />
+                </LoggedInTabNavigator.Navigator>
+            }
         </Translation>
     )
 }
@@ -174,47 +180,47 @@ const AuthStackNavigator = createStackNavigator();
 const AuthNavigator = () => {
     return (
         <Translation>
-        {(t, {i18n}) =>
-            <AuthStackNavigator.Navigator>
-                <AuthStackNavigator.Screen
-                    name='Home'
-                    component={HomeScreen}
-                    options={{
-                        headerShown: false
-                    }}
-                />
-                <AuthStackNavigator.Screen
-                    name='ChangeLang'
-                    component={ChangeLangScreen}
-                    options={{
-                        headerShown: true,
-                        headerTitle: t('Change language')
-                    }}
-                />
-                <AuthStackNavigator.Screen
-                    name='Login'
-                    component={LoginScreen}
-                    options={{
-                        headerShown: true
-                    }}
-                />
-                <AuthStackNavigator.Screen
-                    name='SignUp'
-                    component={SignUpScreen}
-                    options={{
-                        headerShown: true,
-                        headerTitle: t('New Account')
-                    }}
-                />
-                <AuthStackNavigator.Screen
-                    name='LoggedIn'
-                    component={LoggedInNavigator}
-                    options={{
-                        headerShown: false
-                    }}
-                />
-            </AuthStackNavigator.Navigator>
-        }
+            {(t, { i18n }) =>
+                <AuthStackNavigator.Navigator>
+                    <AuthStackNavigator.Screen
+                        name='Home'
+                        component={HomeScreen}
+                        options={{
+                            headerShown: false
+                        }}
+                    />
+                    <AuthStackNavigator.Screen
+                        name='ChangeLang'
+                        component={ChangeLangScreen}
+                        options={{
+                            headerShown: true,
+                            headerTitle: t('Change language')
+                        }}
+                    />
+                    <AuthStackNavigator.Screen
+                        name='Login'
+                        component={LoginScreen}
+                        options={{
+                            headerShown: true
+                        }}
+                    />
+                    <AuthStackNavigator.Screen
+                        name='SignUp'
+                        component={SignUpScreen}
+                        options={{
+                            headerShown: true,
+                            headerTitle: t('New Account')
+                        }}
+                    />
+                    <AuthStackNavigator.Screen
+                        name='LoggedIn'
+                        component={LoggedInNavigator}
+                        options={{
+                            headerShown: false
+                        }}
+                    />
+                </AuthStackNavigator.Navigator>
+            }
         </Translation>
     )
 }
