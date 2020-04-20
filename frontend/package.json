@@ -33,6 +33,7 @@
     "react-native-simple-dialogs": "^1.2.1",
     "react-native-swipe-list-view": "^2.5.0",
     "react-native-tags": "^2.1.0",
+    "react-native-voice-recorder": "^1.0.2",
     "react-native-web": "^0.11.7",
     "react-navigation-header-buttons": "^3.0.5",
     "react-redux": "^7.2.0",

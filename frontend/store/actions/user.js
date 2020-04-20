@@ -43,3 +43,71 @@ export const getUserInfo = () => {
     }
 
 }
+
+export const updatePassword = (old_password, new_password) => {
+    return async (dispatch, getState) => {
+      // any async code you want!
+      const token = getState().auth.token;
+  
+      try {
+        const response = await fetch(
+          `https://${BASE_URL}/api/update-password`,
+          {
+            method: 'POST',
+            headers: {
+              'Authorization': token,
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              old_password,
+              new_password
+            })
+          }
+        );
+  
+  
+        const resData = await response.json();
+  
+        //print response from API
+        console.log(resData)
+  
+      } catch (err) {
+        throw new Error(err.message);
+      }
+  
+    };
+  };
+
+
+  export const resetLink = (email) => {
+    return async (dispatch, getState) => {
+      // any async code you want!
+      const token = getState().auth.token;
+  
+      try {
+        const response = await fetch(
+          `https://${BASE_URL}/api/password/reset`,
+          {
+            method: 'POST',
+            headers: {
+              'Authorization': token,
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              email
+            })
+          }
+        );
+  
+  
+        const resData = await response.json();
+  
+        //print response from API
+        console.log(resData)
+  
+      } catch (err) {
+        throw new Error(err.message);
+      }
+  
+    };
+  };
