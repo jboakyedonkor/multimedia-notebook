@@ -86,7 +86,7 @@ export const updatePassword = (old_password, new_password) => {
   
       try {
         const response = await fetch(
-          `https://${BASE_URL}/api/password/reset`,
+          `https://${BASE_URL}/api/password/reset/`,
           {
             method: 'POST',
             headers: {
